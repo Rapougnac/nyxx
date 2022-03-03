@@ -12,6 +12,9 @@ environment:
 dependencies:
   http: ^0.13.3
   logging: ^1.0.1
+  nyxx_commands: ^3.3.0
+  nyxx_lavalink: ^3.0.1
+  nyxx_pagination: ^2.1.0
   path: ^1.8.0
 
 dev_dependencies:

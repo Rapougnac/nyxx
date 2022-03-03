@@ -1,7 +1,6 @@
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx/src/core/permissions/permissions.dart';
 import 'package:nyxx/src/internal/cache/cacheable.dart';
-import 'package:nyxx/src/utils/builders/presence_builder.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 

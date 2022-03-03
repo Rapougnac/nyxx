@@ -1,7 +1,4 @@
 import 'package:nyxx/nyxx.dart';
-import 'package:nyxx/src/core/guild/guild.dart';
-import 'package:nyxx/src/core/snowflake.dart';
-import 'package:nyxx/src/core/snowflake_entity.dart';
 import 'package:nyxx/src/core/user/member.dart';
 import 'package:nyxx/src/core/user/user.dart';
 import 'package:nyxx/src/internal/cache/cacheable.dart';

@@ -1,7 +1,4 @@
 import 'package:nyxx/nyxx.dart';
-import 'package:nyxx/src/core/snowflake.dart';
-import 'package:nyxx/src/core/snowflake_entity.dart';
-import 'package:nyxx/src/typedefs.dart';
 
 abstract class IAttachment implements SnowflakeEntity, Convertable<AttachmentMetadataBuilder> {
   /// The attachment's filename.

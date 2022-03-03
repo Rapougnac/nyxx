@@ -2,18 +2,11 @@ import 'package:nyxx/nyxx.dart';
 import 'package:nyxx/src/core/message/attachment.dart';
 import 'package:nyxx/src/core/message/components/message_component.dart';
 import 'package:nyxx/src/nyxx.dart';
-import 'package:nyxx/src/core/snowflake.dart';
 import 'package:nyxx/src/core/channel/cacheable_text_channel.dart';
-import 'package:nyxx/src/core/channel/text_channel.dart';
 import 'package:nyxx/src/core/embed/embed.dart';
-import 'package:nyxx/src/core/guild/guild.dart';
-import 'package:nyxx/src/core/message/emoji.dart';
 import 'package:nyxx/src/core/message/guild_emoji.dart';
 import 'package:nyxx/src/core/message/message.dart';
 import 'package:nyxx/src/core/message/reaction.dart';
-import 'package:nyxx/src/core/message/unicode_emoji.dart';
-import 'package:nyxx/src/core/user/member.dart';
-import 'package:nyxx/src/core/user/user.dart';
 import 'package:nyxx/src/internal/cache/cacheable.dart';
 import 'package:nyxx/src/typedefs.dart';
 

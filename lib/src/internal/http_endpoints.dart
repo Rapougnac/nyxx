@@ -1,44 +1,30 @@
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx/src/core/guild/scheduled_event.dart';
-import 'package:nyxx/src/nyxx.dart';
 import 'package:nyxx/src/core/channel/invite.dart';
-import 'package:nyxx/src/core/snowflake.dart';
-import 'package:nyxx/src/core/snowflake_entity.dart';
 import 'package:nyxx/src/core/audit_logs/audit_log.dart';
 import 'package:nyxx/src/core/channel/channel.dart';
 import 'package:nyxx/src/core/channel/dm_channel.dart';
 import 'package:nyxx/src/core/channel/thread_channel.dart';
 import 'package:nyxx/src/core/channel/thread_preview_channel.dart';
-import 'package:nyxx/src/core/channel/guild/guild_channel.dart';
 import 'package:nyxx/src/core/channel/guild/voice_channel.dart';
 import 'package:nyxx/src/core/guild/ban.dart';
 import 'package:nyxx/src/core/guild/guild.dart';
 import 'package:nyxx/src/core/guild/guild_preview.dart';
 import 'package:nyxx/src/core/guild/role.dart';
 import 'package:nyxx/src/core/guild/webhook.dart';
-import 'package:nyxx/src/core/message/emoji.dart';
 import 'package:nyxx/src/core/message/guild_emoji.dart';
 import 'package:nyxx/src/core/message/message.dart';
 import 'package:nyxx/src/core/message/sticker.dart';
 import 'package:nyxx/src/core/user/member.dart';
 import 'package:nyxx/src/core/user/user.dart';
 import 'package:nyxx/src/core/voice/voice_region.dart';
-import 'package:nyxx/src/internal/constants.dart';
 import 'package:nyxx/src/internal/cache/cacheable.dart';
 import 'package:nyxx/src/internal/http/http_handler.dart';
 import 'package:nyxx/src/internal/http/http_request.dart';
 import 'package:nyxx/src/internal/http/http_response.dart';
 import 'package:nyxx/src/internal/response_wrapper/thread_list_result_wrapper.dart';
 import 'package:nyxx/src/typedefs.dart';
-import 'package:nyxx/src/utils/builders/attachment_builder.dart';
-import 'package:nyxx/src/utils/builders/channel_builder.dart';
-import 'package:nyxx/src/utils/builders/guild_builder.dart';
-import 'package:nyxx/src/utils/builders/guild_event_builder.dart';
 import 'package:nyxx/src/utils/builders/message_builder.dart';
-import 'package:nyxx/src/utils/builders/permissions_builder.dart';
-import 'package:nyxx/src/utils/builders/sticker_builder.dart';
-import 'package:nyxx/src/utils/builders/thread_builder.dart';
-import 'package:nyxx/src/utils/utils.dart';
 
 /// Raw access to all http endpoints exposed by nyxx.
 /// Allows to execute specific action without any context.

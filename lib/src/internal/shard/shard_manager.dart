@@ -3,12 +3,8 @@ import 'dart:collection';
 
 import 'package:logging/logging.dart';
 import 'package:nyxx/nyxx.dart';
-import 'package:nyxx/src/events/member_chunk_event.dart';
-import 'package:nyxx/src/events/raw_event.dart';
 import 'package:nyxx/src/internal/connection_manager.dart';
-import 'package:nyxx/src/internal/interfaces/disposable.dart';
 import 'package:nyxx/src/internal/shard/shard.dart';
-import 'package:nyxx/src/utils/builders/presence_builder.dart';
 
 /// Spawns, connects, monitors, manages and terminates shards.
 /// Sharding will be automatic if no user settings are supplied in

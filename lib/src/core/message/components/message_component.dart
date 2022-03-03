@@ -1,12 +1,6 @@
 import 'dart:convert';
 
 import 'package:nyxx/nyxx.dart';
-import 'package:nyxx/src/core/message/emoji.dart';
-import 'package:nyxx/src/core/message/guild_emoji.dart';
-import 'package:nyxx/src/core/message/unicode_emoji.dart';
-import 'package:nyxx/src/core/message/components/component_style.dart';
-import 'package:nyxx/src/typedefs.dart';
-import 'package:nyxx/src/utils/enum.dart';
 
 /// Type of interaction component
 class ComponentType extends IEnum<int> {

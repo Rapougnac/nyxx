@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:nyxx/nyxx.dart';
-import 'package:nyxx/src/core/snowflake.dart';
 
 class SnowflakeCache<V> extends InMemoryCache<Snowflake, V> {
   final int cacheSize;
