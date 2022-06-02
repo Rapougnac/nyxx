@@ -7,10 +7,10 @@ import 'package:test/scaffolding.dart';
 
 import 'package:nyxx/src/internal/event_controller.dart';
 
-final testChannelSnowflake = Snowflake(846139169818017812);
-final testGuildSnowflake = Snowflake(846136758470443069);
+final testChannelSnowflake = Snowflake(912636659504414731);
+final testGuildSnowflake = Snowflake(911736666551640075);
 final testUserBotSnowflake = Snowflake(476603965396746242);
-final testUserHumanSnowflake = Snowflake(302359032612651009);
+final testUserHumanSnowflake = Snowflake(253554702858452992);
 
 main() async {
   final bot = NyxxFactory.createNyxxWebsocket(Platform.environment["TEST_TOKEN"]!, GatewayIntents.guildMessages)
@@ -28,10 +28,10 @@ main() async {
   });
 
   test('base nyxx', () {
-    expect(bot.appId, equals(Snowflake(846158316467650561)));
+    expect(bot.appId, equals(Snowflake(943514479545708604)));
     expect(bot.ready, isTrue);
     expect(bot.startTime.isBefore(DateTime.now()), isTrue);
-    expect(bot.inviteLink, contains('846158316467650561'));
+    expect(bot.inviteLink, contains('943514479545708604'));
     expect(bot.version, isA<String>());
     expect(bot.shards, equals(1));
 
@@ -53,7 +53,7 @@ main() async {
     final guildPreview = await bot.fetchGuildPreview(testGuildSnowflake);
 
     expect(guildPreview.id, equals(testGuildSnowflake));
-    expect(guildPreview.name, equals('nyxx'));
+    expect(guildPreview.name, equals('Server von 🥀 | Rapougnac'));
 
     expect(guildPreview.discoveryURL(), isNull);
     expect(guildPreview.splashURL(), isNull);
@@ -147,8 +147,8 @@ main() async {
     final guild = await bot.fetchGuild(testGuildSnowflake);
 
     expect(guild.afkChannel, isNull);
-    expect(guild.name, 'nyxx');
-    expect(guild.features, contains(GuildFeature.verified));
+    expect(guild.name, 'Server von 🥀 | Rapougnac');
+    expect(guild.features, contains(GuildFeature.welcomeScreenEnabled));
 
     final memberBot = await guild.fetchMember(testUserBotSnowflake);
 
