@@ -10,6 +10,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    environement: Unit-Tests
     env:
       TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
     steps:
@@ -36,6 +37,7 @@ jobs:
   format:
     name: Format
     runs-on: ubuntu-latest
+    environement: Unit-Tests
     env:
       TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
     steps:
@@ -63,6 +65,7 @@ jobs:
     needs: [ format, analyze ]
     name: Tests
     runs-on: ubuntu-latest
+    environement: Unit-Tests
     env:
       TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
     steps:
