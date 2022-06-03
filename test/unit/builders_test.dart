@@ -1,19 +1,23 @@
 import 'dart:io';
 
 import 'package:http/http.dart';
-import 'package:nyxx/nyxx.dart';
 import 'package:nyxx/src/core/channel/text_channel.dart';
 import 'package:nyxx/src/core/discord_color.dart';
 import 'package:nyxx/src/core/guild/scheduled_event.dart';
 import 'package:nyxx/src/core/guild/status.dart';
+import 'package:nyxx/src/core/guild/system_channel_flags.dart';
 import 'package:nyxx/src/core/message/message.dart';
 import 'package:nyxx/src/core/permissions/permissions.dart';
 import 'package:nyxx/src/core/snowflake.dart';
 import 'package:nyxx/src/core/user/presence.dart';
 import 'package:nyxx/src/internal/cache/cacheable.dart';
+import 'package:nyxx/src/internal/exceptions/embed_builder_argument_exception.dart';
 import 'package:nyxx/src/utils/builders/attachment_builder.dart';
 import 'package:nyxx/src/utils/builders/channel_builder.dart';
+import 'package:nyxx/src/utils/builders/embed_author_builder.dart';
 import 'package:nyxx/src/utils/builders/embed_builder.dart';
+import 'package:nyxx/src/utils/builders/embed_field_builder.dart';
+import 'package:nyxx/src/utils/builders/embed_footer_builder.dart';
 import 'package:nyxx/src/utils/builders/forum_thread_builder.dart';
 import 'package:nyxx/src/utils/builders/guild_builder.dart';
 import 'package:nyxx/src/utils/builders/guild_event_builder.dart';
@@ -270,6 +274,16 @@ main() {
         ..footer = (EmbedFooterBuilder()..text = ('g' * 2048));
 
       expect(() => overloadedEmbedBuilder.build(), throwsA(isA<EmbedBuilderArgumentException>()));
+
+      expect(() => EmbedFooterBuilder()..text = ('e' * 2049)..build(), throwsA(isA<EmbedBuilderArgumentException>()));
+
+      expect(() => EmbedFieldBuilder()..name = ('e' * 257)..build(), throwsA(isA<EmbedBuilderArgumentException>()));
+
+      expect(() => EmbedFieldBuilder()..content = ('e' * 1025)..build(), throwsA(isA<EmbedBuilderArgumentException>()));
+
+      expect(() => EmbedAuthorBuilder()..name = ('e' * 257)..build(), throwsA(isA<EmbedBuilderArgumentException>()));
+
+      expect(() => EmbedAuthorBuilder()..name = ''..build(), throwsA(isA<EmbedBuilderArgumentException>()));
     });
 
     test('text', () {
