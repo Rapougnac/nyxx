@@ -83,6 +83,7 @@ main() async {
       ..nonce = random.nextInt(1000000).toString();
 
     final messageEditWsFuture = bot.eventsWs.onMessageUpdate.firstWhere((element) => element.messageId == message.id);
+    await Future.delayed(const Duration(seconds: 1));
     final messageEdit = await message.edit(messageEditBuilder);
     final messageEditWs = await channel.fetchMessage((await messageEditWsFuture).messageId);
 
@@ -94,6 +95,8 @@ main() async {
     await messageEdit.deleteSelfReaction(UnicodeEmoji("😂"));
 
     await messageEdit.suppressEmbeds();
+
+    await Future.delayed(const Duration(seconds: 3));
 
     await messageEdit.pinMessage();
     final pinnedMessages = await (await messageEdit.channel.getOrDownload()).fetchPinnedMessages().toList();
@@ -111,7 +114,7 @@ main() async {
     expect(toBuilder.content, equals("Edit test"));
 
     await messageEdit.delete();
-  }, skip: 'Rate limits problems');
+  });
 
   test("file upload tests", () async {
     final messageBuilder = MessageBuilder.files([
