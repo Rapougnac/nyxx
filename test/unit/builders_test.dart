@@ -1,12 +1,19 @@
+import 'dart:io';
+
+import 'package:http/http.dart';
 import 'package:nyxx/src/core/channel/text_channel.dart';
+import 'package:nyxx/src/core/guild/scheduled_event.dart';
 import 'package:nyxx/src/core/guild/status.dart';
+import 'package:nyxx/src/core/message/message.dart';
 import 'package:nyxx/src/core/permissions/permissions.dart';
 import 'package:nyxx/src/core/snowflake.dart';
 import 'package:nyxx/src/core/user/presence.dart';
 import 'package:nyxx/src/internal/cache/cacheable.dart';
+import 'package:nyxx/src/utils/builders/attachment_builder.dart';
 import 'package:nyxx/src/utils/builders/channel_builder.dart';
 import 'package:nyxx/src/utils/builders/embed_builder.dart';
 import 'package:nyxx/src/utils/builders/forum_thread_builder.dart';
+import 'package:nyxx/src/utils/builders/guild_event_builder.dart';
 import 'package:nyxx/src/utils/builders/member_builder.dart';
 import 'package:nyxx/src/utils/builders/message_builder.dart';
 import 'package:nyxx/src/utils/builders/permissions_builder.dart';
@@ -17,6 +24,7 @@ import 'package:nyxx/src/utils/builders/thread_builder.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
+import '../mocks/channel.mock.dart';
 import '../mocks/member.mock.dart';
 import '../mocks/message.mock.dart';
 import '../mocks/nyxx_rest.mock.dart';
@@ -28,7 +36,7 @@ main() {
       ..private = false;
     expect(publicBuilder.build(), equals({"auto_archive_duration": ThreadArchiveTime.threeDays.value, "name": 'test name', "type": 11}));
 
-    final privateBuilder = ThreadBuilder("second name")..private = true;
+    final privateBuilder = ThreadBuilder.private("second name");
     expect(privateBuilder.build(), equals({"name": 'second name', "type": 12}));
   });
 
@@ -72,6 +80,9 @@ main() {
   group('presence_builder.dart', () {
     test('PresenceBuilder', () {
       final activityBuilder = ActivityBuilder.game("test game name");
+      final activityBuilderWatching = ActivityBuilder.watching("test watching name");
+      
+      expect(activityBuilderWatching.build(), equals({"name": "test watching name", "type": 3}));
 
       final ofBuilder = PresenceBuilder.of(status: UserStatus.dnd, activity: activityBuilder);
       expect(
@@ -212,6 +223,38 @@ main() {
       expect(MessageDecoration.bold.format('test'), equals('**test**'));
     });
 
+    test('files', () async {
+      final builder = MessageBuilder.files([AttachmentBuilder.path('./test/files/1.png')]);
+      final mockChannel = MockTextChannel(Snowflake.zero());
+      
+      expect(builder.getMappedFiles(), isNotEmpty);
+
+      builder.addAttachment(AttachmentBuilder.path('./test/files/2.png'));
+
+      expect(builder.files!.length, equals(2));
+
+      builder.addBytesAttachment(File('./test/files/3.png').readAsBytesSync(), '3.png');
+
+      builder.addFileAttachment(File('./test/files/1.png'));
+
+      builder.addPathAttachment('./test/files/2.png');
+
+      expect(builder.files!.length, equals(5));
+
+      expect(await builder.send(mockChannel), isA<IMessage>());
+    });
+
+    test('fromMessage', () {
+      final mockMessage = MockMessage({'content': 'testt', 'tts': true}, Snowflake.zero());
+
+      final builder = MessageBuilder.fromMessage(mockMessage);
+
+      expect(builder.tts, isTrue);
+      expect(builder.content, equals('testt'));
+      expect(builder.embeds, isEmpty);
+      expect(builder.replyBuilder, isNull);
+    });
+
     test("ForumThreadBuilder", () {
       final builder = ForumThreadBuilder("test", MessageBuilder.content("test"));
 
@@ -225,5 +268,52 @@ main() {
           })
       );
     });
+  });
+
+  group('Attachments builders', () {
+    test('AttachementMetadataBuilder', () {
+      final builder = AttachmentMetadataBuilder(Snowflake(1234), 'test.png', 'A description');
+      final builder2 = AttachmentMetadataBuilder(Snowflake(456), 'test.png');
+
+      expect(builder.build(), equals({'id': '1234', 'filename': 'test.png', 'description': 'A description'}));
+      expect(builder2.build(), equals({'id': '456', 'filename': 'test.png', 'description': 'test.png'}));
+    });
+
+    test('AttachmentBuilder', () {
+      final builder = AttachmentBuilder.path('./test/files/1.png', name: 'one.png', spoiler: true);
+
+      expect(builder.getBase64(), startsWith('data:image/png;base64,'));
+      expect(builder.attachUrl, equals('attachment://one.png'));
+      expect(builder.getMultipartFile(), isA<MultipartFile>());
+    });
+  });
+
+  test('GuildEventBuilder', () {
+    final builder = GuildEventBuilder()
+      ..metadata = EntityMetadataBuilder('test')
+      ..name = 'Super Event'
+      ..privacyLevel = GuildEventPrivacyLevel.guildOnly
+      ..startDate = DateTime(2022, 8, 3)
+      ..endDate = DateTime(2022, 8, 4)
+      ..description = 'Cool event'
+      ..type = GuildEventType.external
+      ..status = GuildEventStatus.active;
+
+    expect(
+        builder.build(),
+        equals({
+          'channel_id': '0',
+          'name': 'Super Event',
+          'description': 'Cool event',
+          'scheduled_start_time': '2022-08-03T00:00:00.000',
+          'scheduled_end_time': '2022-08-04T00:00:00.000',
+          'entity_type': 3,
+          'privacy_level': 2,
+          'status': 2,
+          'entity_metadata': {
+            'location': 'test'
+          }
+        }),
+    );
   });
 }
