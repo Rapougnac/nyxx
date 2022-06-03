@@ -7,7 +7,7 @@ import 'package:test/scaffolding.dart';
 
 import 'package:nyxx/src/internal/event_controller.dart';
 
-final testChannelSnowflake = Snowflake(912636659504414731);
+final testChannelSnowflake = Snowflake(981911963288346675);
 final testGuildSnowflake = Snowflake(911736666551640075);
 final testUserBotSnowflake = Snowflake(476603965396746242);
 final testUserHumanSnowflake = Snowflake(253554702858452992);
@@ -28,10 +28,10 @@ main() async {
   });
 
   test('base nyxx', () {
-    expect(bot.appId, equals(Snowflake(943514479545708604)));
+    expect(bot.appId, equals(Snowflake(963759538538954834)));
     expect(bot.ready, isTrue);
     expect(bot.startTime.isBefore(DateTime.now()), isTrue);
-    expect(bot.inviteLink, contains('943514479545708604'));
+    expect(bot.inviteLink, contains('963759538538954834'));
     expect(bot.version, isA<String>());
     expect(bot.shards, equals(1));
 
@@ -129,6 +129,7 @@ main() async {
 
     expect(editedMessage.attachments, hasLength(2));
 
+    await Future.delayed(const Duration(seconds: 1));
     await editedMessage.delete();
   });
 
