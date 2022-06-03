@@ -118,5 +118,5 @@ class PermissionsConstants {
   static const int startEmbeddedActivities = 1 << 39;
 
   /// All of the permissions
-  static int get allPermissions => 1099511627775;
+  static const int allPermissions = 1099511627775;
 }
