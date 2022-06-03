@@ -181,7 +181,37 @@ main() {
     });
 
     test('embeds', () async {
-      final builder = MessageBuilder.embed(EmbedBuilder()..description = 'test1');
+      final builder = MessageBuilder.embed(
+        EmbedBuilder()
+          ..description = 'test1'
+          ..addAuthor(
+            (author) => author
+              ..iconUrl = 'https://i.imgur.com/tPLHwT9.jpeg'
+              ..name = 'some name'
+              ..url = 'https://google.com',
+          )
+          ..addFooter(
+            (footer) => footer
+              ..iconUrl = 'https://i.imgur.com/tPLHwT9.jpeg'
+              ..text = 'Hello',
+          )
+          ..addField(
+            builder: (field) => field
+              ..content = 'test3'
+              ..inline = true
+              ..name = 'test4',
+          )
+          ..replaceField(
+            name: 'test4',
+            inline: false,
+            content: 'bb',
+          )
+          ..addField(
+            name: 'h',
+            content: 'aa',
+            inline: true,
+          ),
+      );
       await builder.addEmbed((embed) => embed.description = 'test2');
 
       final result = builder.build();
@@ -191,10 +221,55 @@ main() {
           equals({
             'content': '',
             'embeds': [
-              {'description': 'test1'},
-              {'description': 'test2'}
+              {
+                'description': 'test1',
+                'footer': {
+                  'text': 'Hello',
+                  'icon_url': 'https://i.imgur.com/tPLHwT9.jpeg'
+                },
+                'author': {
+                  'name': 'some name',
+                  'icon_url': 'https://i.imgur.com/tPLHwT9.jpeg',
+                  'url': 'https://google.com'
+                },
+                'fields': [
+                  {
+                    'name': 'test4',
+                    'value': 'bb',
+                    'inline': false,
+                  },
+                  {
+                    'name': 'h',
+                    'value': 'aa',
+                    'inline': true,
+                  },
+                ],
+              },
+              {
+                'description': 'test2',
+              }
             ]
-          }));
+          },
+        ),
+      );
+
+      expect(() => EmbedBuilder()..title = ('t' * 257)..build(), throwsA(isA<EmbedBuilderArgumentException>()));
+      expect(() => EmbedBuilder()..description = ('t' * 2049)..build(), throwsA(isA<EmbedBuilderArgumentException>()));
+      expect(() => EmbedBuilder()..fields = [for(int i = 0; i <= 25; i++) EmbedFieldBuilder()]..build(), throwsA(isA<EmbedBuilderArgumentException>()));
+
+      final overloadedEmbedBuilder = EmbedBuilder()
+        ..title = ('t' * 256)
+        ..description = ('e' * 4096)
+        ..fields = [
+          for (int i = 0; i < 25; i++)
+            EmbedFieldBuilder()
+              ..content = ('c' * 1024)
+              ..name = ('n' * 256)
+        ]
+        ..author = (EmbedAuthorBuilder()..name = ('f' * 256))
+        ..footer = (EmbedFooterBuilder()..text = ('g' * 2048));
+
+      expect(() => overloadedEmbedBuilder.build(), throwsA(isA<EmbedBuilderArgumentException>()));
     });
 
     test('text', () {
