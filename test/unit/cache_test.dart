@@ -1,16 +1,18 @@
 import 'package:nyxx/nyxx.dart';
+import 'package:nyxx/src/internal/cache/cacheable.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
 import '../mocks/channel.mock.dart';
 import '../mocks/member.mock.dart';
 import '../mocks/message.mock.dart';
+import '../mocks/nyxx_rest.mock.dart';
 
 IMessage createMockMessage(Snowflake id) => MockMessage({"content": "i dont care"}, id);
 
 main() {
   group("cache", () {
-    test("Snowflake cache", () {
+    test("Snowflake cache", () async {
       final firstMessage = createMockMessage(Snowflake(1));
       final secondMessage = createMockMessage(Snowflake(2));
       final thirdMessage = createMockMessage(Snowflake(3));
@@ -37,11 +39,30 @@ main() {
       expect(alwaysEmptyCache, hasLength(0));
       cache[firstMessage.id] = firstMessage;
       expect(alwaysEmptyCache, hasLength(0));
+      await cache.dispose();
+    });
+
+    test("Channel cache", () async {
+      final cache = ChannelCacheable(NyxxRestEmptyMock(), Snowflake.zero());
+
+      expect(cache.getFromCache(), isNull);
+      expect(cache.hashCode, cache.id.hashCode);
     });
   });
 
   group("cache policy", () {
+    // test('CachePolicy', () {
+    //   final cachePolicy = CachePolicy();
+    // });
+
     test("CachePolicyLocation", () {
+      final cachePolicyLocation = CachePolicyLocation();
+
+      expect(cachePolicyLocation.objectConstructor, isFalse);
+      expect(cachePolicyLocation.event, isTrue);
+      expect(cachePolicyLocation.http, isTrue);
+      expect(cachePolicyLocation.other, isFalse);
+
       final cachePolicyLocationAll = CachePolicyLocation.all();
 
       expect(cachePolicyLocationAll.objectConstructor, isTrue);
@@ -68,6 +89,15 @@ main() {
 
       final memberCachePolicyOnline = MemberCachePolicy.online;
       expect(memberCachePolicyOnline.canCache(member), isFalse);
+
+      final memberCachePolicyVoice = MemberCachePolicy.voice;
+      expect(memberCachePolicyVoice.canCache(member), isFalse);
+
+      final memberCachePolicyOwner = MemberCachePolicy.owner;
+      expect(memberCachePolicyOwner.canCache(member), isFalse);
+
+      final memberCachePolicyDef = MemberCachePolicy.def;
+      expect(memberCachePolicyDef.canCache(member), isFalse);
     });
 
     test('ChannelCachePolicy', () {
@@ -77,6 +107,11 @@ main() {
 
       final channelCachePolicy = ChannelCachePolicy.none;
       expect(channelCachePolicy.canCache(voiceChannel), isFalse);
+
+      final channelCachePolicyAll = ChannelCachePolicy.all;
+      expect(channelCachePolicyAll.canCache(voiceChannel), isTrue);
+      expect(channelCachePolicyAll.canCache(threadChannel), isTrue);
+      expect(channelCachePolicyAll.canCache(textChannel), isTrue);
 
       final channelCachePolicyVoice = ChannelCachePolicy.voice;
       expect(channelCachePolicyVoice.canCache(voiceChannel), isTrue);
@@ -91,13 +126,24 @@ main() {
       expect(channelCachePolicyThread.canCache(textChannel), isFalse);
       expect(channelCachePolicyThread.canCache(threadChannel), isTrue);
       expect(channelCachePolicyThread.canCache(voiceChannel), isFalse);
+
+      final channelCachePolicyDef = ChannelCachePolicy.def;
+      expect(channelCachePolicyDef.canCache(voiceChannel), isTrue);
+      expect(channelCachePolicyDef.canCache(textChannel), isTrue);
+      expect(channelCachePolicyDef.canCache(threadChannel), isTrue);
     });
 
     test('MessageCachePolicy', () {
       final message = createMockMessage(Snowflake.zero());
 
-      final messageCachePolicy = MessageCachePolicy.none;
-      expect(messageCachePolicy.canCache(message), isFalse);
+      final messageCachePolicyAll = MessageCachePolicy.all;
+      expect(messageCachePolicyAll.canCache(message), isTrue);
+
+      final messageCachePolicyNone = MessageCachePolicy.none;
+      expect(messageCachePolicyNone.canCache(message), isFalse);
+
+      final messageCachePolicyDef = MessageCachePolicy.def;
+      expect(messageCachePolicyDef.canCache(message), isTrue);
 
       final messageCachePolicyGuild = MessageCachePolicy.guildMessages;
       expect(messageCachePolicyGuild.canCache(message), isTrue);

@@ -12,5 +12,11 @@ class MockMember extends SnowflakeEntity with Fake implements IMember {
   @override
   String get mention => '<@$id>';
 
+  @override
+  IVoiceState? get voiceState => null;
+
+  @override
+  Cacheable<Snowflake, IGuild> get guild => GuildCacheable(NyxxRestEmptyMock(), Snowflake.zero());
+
   MockMember(Snowflake id) : super(id);
 }

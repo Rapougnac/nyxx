@@ -7,6 +7,12 @@ import 'package:nyxx/src/internal/http_endpoints.dart';
 class NyxxRestEmptyMock extends Fake implements INyxxRest {
   @override
   SnowflakeCache<IUser> get users => SnowflakeCache();
+  
+  @override
+  get channels => SnowflakeCache<IChannel>();
+
+  @override
+  get guilds => SnowflakeCache<IGuild>();
 }
 
 class NyxxRestMock extends Fake implements INyxxRest {
