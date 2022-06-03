@@ -92,6 +92,7 @@ main() async {
     expect(messageEditWs.content, equals("Edit test"));
 
     await messageEdit.createReaction(UnicodeEmoji("😂"));
+    await Future.delayed(const Duration(seconds: 1));
     await messageEdit.deleteSelfReaction(UnicodeEmoji("😂"));
 
     await messageEdit.suppressEmbeds();
@@ -112,7 +113,7 @@ main() async {
 
     final toBuilder = messageEdit.toBuilder();
     expect(toBuilder.content, equals("Edit test"));
-
+    await Future.delayed(const Duration(seconds: 1));
     await messageEdit.delete();
   });
 
