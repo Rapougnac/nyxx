@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:nyxx/nyxx.dart';
 import 'package:nyxx/src/core/channel/text_channel.dart';
+import 'package:nyxx/src/core/discord_color.dart';
 import 'package:nyxx/src/core/guild/scheduled_event.dart';
 import 'package:nyxx/src/core/guild/status.dart';
 import 'package:nyxx/src/core/message/message.dart';
@@ -13,6 +15,7 @@ import 'package:nyxx/src/utils/builders/attachment_builder.dart';
 import 'package:nyxx/src/utils/builders/channel_builder.dart';
 import 'package:nyxx/src/utils/builders/embed_builder.dart';
 import 'package:nyxx/src/utils/builders/forum_thread_builder.dart';
+import 'package:nyxx/src/utils/builders/guild_builder.dart';
 import 'package:nyxx/src/utils/builders/guild_event_builder.dart';
 import 'package:nyxx/src/utils/builders/member_builder.dart';
 import 'package:nyxx/src/utils/builders/message_builder.dart';
@@ -288,18 +291,19 @@ main() {
     });
   });
 
-  test('GuildEventBuilder', () {
-    final builder = GuildEventBuilder()
-      ..metadata = EntityMetadataBuilder('test')
-      ..name = 'Super Event'
-      ..privacyLevel = GuildEventPrivacyLevel.guildOnly
-      ..startDate = DateTime(2022, 8, 3)
-      ..endDate = DateTime(2022, 8, 4)
-      ..description = 'Cool event'
-      ..type = GuildEventType.external
-      ..status = GuildEventStatus.active;
+  group('Guild', () {
+    test('GuildEventBuilder', () {
+      final builder = GuildEventBuilder()
+        ..metadata = EntityMetadataBuilder('test')
+        ..name = 'Super Event'
+        ..privacyLevel = GuildEventPrivacyLevel.guildOnly
+        ..startDate = DateTime(2022, 8, 3)
+        ..endDate = DateTime(2022, 8, 4)
+        ..description = 'Cool event'
+        ..type = GuildEventType.external
+        ..status = GuildEventStatus.active;
 
-    expect(
+      expect(
         builder.build(),
         equals({
           'channel_id': '0',
@@ -310,10 +314,83 @@ main() {
           'entity_type': 3,
           'privacy_level': 2,
           'status': 2,
-          'entity_metadata': {
-            'location': 'test'
-          }
+          'entity_metadata': {'location': 'test'}
         }),
-    );
+      );
+    });
+
+    test('GuildBuilder', () {
+      final builder = GuildBuilder('test guild')
+        ..icon = AttachmentBuilder.path('./test/files/1.png')
+        ..verificationLevel = 0
+        ..defaultMessageNotifications = 0
+        ..explicitContentFilter = 0
+        ..roles = [
+          RoleBuilder('test role')
+            ..color = DiscordColor.aquamarine
+            ..hoist = true
+            ..position = 1
+            ..permission = (PermissionsBuilder()..administrator = true)
+            ..mentionable = true
+            ..roleIcon = AttachmentBuilder.path('./test/files/2.png')
+            ..roleIconEmoji = '😔'
+            ..id = Snowflake.zero()
+        ]
+        ..channels = [
+          VoiceChannelBuilder()
+            ..name = 'test channel'
+            ..bitrate = 123
+            ..userLimit = 10
+            // this should be in Text channel builder, no?
+            ..rateLimitPerUser = 15
+            ..rtcRegion = 'en-US',
+          TextChannelBuilder.create('test channel 2')..id = Snowflake(188)
+        ]
+        ..afkChannelId = Snowflake(42)
+        ..afkTimeout = 5000
+        ..systemChannelId = Snowflake(188)
+        ..systemChannelFlags =
+            SystemChannelFlags.suppressGuildReminderNotifications;
+          
+        // print(builder.build());
+        expect(builder.build(), equals({
+            'name': 'test guild',
+            'icon':
+                'data:image/.png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAnElEQVRYw+3ZQQ6AIAxEUdpw/yvXvSQaCi3V/C5dmJdBdIhiZq3eaCs5sH7A6rtuJCK3KyubSdZ34ghal/Ug0LFnK87kTCsU5EwrwTSXVg5oLq1Xk5lt/LzqLlP2Ij6bggqIFjT5X6fRLU0dUSU0R62Wk4eV1rC/XwMzDyO9iIMuDwsWLFiwTh9oWURYUf2MRYQFq8II/3xgwSowF+WZM2SFu9ItAAAAAElFTkSuQmCC',
+            'verification_level': 0,
+            'default_message_notifications': 0,
+            'explicit_content_filter': 0,
+            'roles': [
+              {
+                'name': 'test role',
+                'color': 65471,
+                'hoist': true,
+                'position': 1,
+                'permissions': '8',
+                'mentionable': true,
+                'icon':
+                    'data:image/.png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAA6klEQVRYw+2ZyQ7DMAhEDeL/f5leo6hZPAyIVnB1bL+wZeyIu69+pqulDdZgZZnBM0Xkaihe3QIscQPEItvDegNEIdMkJuB5BCuyRxYWzARPtODSxwQiehTvW+5+SuqvOY6xKuaqbN2hmJ/yGimIVaPPlF5HFG5t6KoUBUFpE7+vtyoPI8blYDX69CBiPtZuyU7G4iofbRhBGhZdJGoeU5GWr1Q+2ip20ePreyVd561sJgSrgGkviI+ZRPyWGyu1ufrCKLVG1zx3VyPc+t9Ct1Vlx5d8RJxLyj/Asrz6ilSMzM+VwRqswbqyD65hY2n2oxxTAAAAAElFTkSuQmCC',
+                'unicode_emoji': '😔',
+                'id': 0
+              }
+            ],
+            'channels': [
+              {
+                'name': 'test channel',
+                'type': 2,
+                'bitrate': 123,
+                'user_limit': 10,
+                'rate_limit_per_user': 15,
+                'rtc_region': 'en-US'
+              },
+              {'name': 'test channel 2', 'id': '188', 'type': 0}
+            ],
+            // TODO: Fix this, this is serialized as Snowflake, not String or int.
+            'afk_channel_id': 42,
+            'afk_timeout': 5000,
+            'system_channel_id': '188',
+            'system_channel_flags': 4
+          }));
+    });
   });
 }
