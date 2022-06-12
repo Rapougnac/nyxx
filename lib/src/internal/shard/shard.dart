@@ -244,11 +244,11 @@ class Shard implements IShard {
         throw UnrecoverableNyxxError("Gateway error: 4010");
       case 4013:
         throw UnrecoverableNyxxError("Gateway error: 4013: Cannot connect to gateway due intent value is invalid. "
-            "Check https://discordapp.com/developers/docs/topics/gateway#gateway-intents for more info.");
+            "Check https://discord.com/developers/docs/topics/gateway#gateway-intents for more info.");
       case 4014:
         throw UnrecoverableNyxxError("Gateway error: 4014: You sent a disallowed intent for a Gateway Intent. "
             "You may have tried to specify an intent that you have not enabled or are not whitelisted for. "
-            "Check https://discordapp.com/developers/docs/topics/gateway#gateway-intents for more info.");
+            "Check https://discord.com/developers/docs/topics/gateway#gateway-intents for more info.");
       case 4007:
       case 4009:
       case 1005:

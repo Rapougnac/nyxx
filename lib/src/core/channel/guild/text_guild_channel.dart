@@ -72,7 +72,7 @@ class TextGuildChannel extends GuildChannel implements ITextGuildChannel {
 
   /// Returns url to this channel.
   @override
-  String get url => "https://discordapp.com/channels/${guild.id.toString()}"
+  String get url => "https://discord.com/channels/${guild.id.toString()}"
       "/${id.toString()}";
 
   @override

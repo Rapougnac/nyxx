@@ -29,7 +29,7 @@ abstract class IAuditLogEntry implements SnowflakeEntity {
 
 /// Single entry of Audit Log
 ///
-/// /// [Look here for more](https://discordapp.com/developers/docs/resources/audit-log)
+/// /// [Look here for more](https://discord.com/developers/docs/resources/audit-log)
 class AuditLogEntry extends SnowflakeEntity implements IAuditLogEntry {
   /// Id of the affected entity (webhook, user, role, etc.)
   @override

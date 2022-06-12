@@ -16,7 +16,7 @@ class Snowflake implements Comparable<Snowflake> {
   int get id => _id;
 
   /// Returns timestamp included in [Snowflake]
-  /// [Snowflake reference](https://discordapp.com/developers/docs/reference#snowflakes)
+  /// [Snowflake reference](https://discord.com/developers/docs/reference#snowflakes)
   DateTime get timestamp => DateTime.fromMillisecondsSinceEpoch((_id >> 22).toInt() + discordEpoch, isUtc: true);
 
   /// Returns true if snowflake is zero

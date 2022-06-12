@@ -86,7 +86,7 @@ class ClientOptions {
 /// When identifying to the gateway, you can specify an intents parameter which
 /// allows you to conditionally subscribe to pre-defined "intents", groups of events defined by Discord.
 /// If you do not specify a certain intent, you will not receive any of the gateway events that are batched into that group.
-/// [Reference](https://discordapp.com/developers/docs/topics/gateway#gateway-intents)
+/// [Reference](https://discord.com/developers/docs/topics/gateway#gateway-intents)
 class GatewayIntents {
   /// Includes events: `GUILD_CREATE, GUILD_UPDATE, GUILD_DELETE, GUILD_ROLE_CREATE, GUILD_ROLE_UPDATE, GUILD_ROLE_DELETE, CHANNEL_DELETE, CHANNEL_CREATE, CHANNEL_UPDATE, CHANNEL_PINS_UPDATE`
   static const int guilds = 1 << 0;

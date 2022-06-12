@@ -250,7 +250,7 @@ class Message extends SnowflakeEntity implements IMessage {
 
   /// Returns clickable url to this message.
   @override
-  String get url => "https://discordapp.com/channels/${guild?.id ?? '@me'}"
+  String get url => "https://discord.com/channels/${guild?.id ?? '@me'}"
       "/${channel.id}/$id";
 
   /// Member data of message author

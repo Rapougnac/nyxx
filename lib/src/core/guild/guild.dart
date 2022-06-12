@@ -217,10 +217,9 @@ abstract class IGuild implements SnowflakeEntity {
   Stream<IInvite> fetchGuildInvites();
 
   /// Returns Audit logs.
-  /// https://discordapp.com/developers/docs/resources/audit-log
-  ///
-  /// ```
-  /// var logs = await guild.fetchAuditLogs(actionType: 1);
+  /// https://discord.com/developers/docs/resources/audit-log
+  /// ```dart
+  /// var logs = await guild.fetchAuditLogs(auditType: AuditLogEntryType.guildUpdate);
   /// ```
   Future<IAuditLog> fetchAuditLogs({Snowflake? userId, int? actionType, Snowflake? before, int? limit});
 
@@ -437,7 +436,7 @@ class Guild extends SnowflakeEntity implements IGuild {
 
   /// Returns url to this guild.
   @override
-  String get url => "https://discordapp.com/channels/${id.toString()}";
+  String get url => "https://discord.com/guilds/${id.toString()}";
 
   /// Getter for @everyone role
   @override
@@ -683,7 +682,7 @@ class Guild extends SnowflakeEntity implements IGuild {
   Stream<IInvite> fetchGuildInvites() => client.httpEndpoints.fetchGuildInvites(id);
 
   /// Returns Audit logs.
-  /// https://discordapp.com/developers/docs/resources/audit-log
+  /// https://discord.com/developers/docs/resources/audit-log
   ///
   /// ```
   /// var logs = await guild.fetchAuditLogs(actionType: 1);

@@ -76,7 +76,7 @@ main() async {
 
     expect(message.isByWebhook, equals(false));
     expect(message.isCrossPosting, equals(false));
-    expect(wsMessage.url, equals("https://discordapp.com/channels/${wsMessage.guild!.id}/${message.channel.id}/${message.id}"));
+    expect(wsMessage.url, equals("https://discord.com/channels/${wsMessage.guild!.id}/${message.channel.id}/${message.id}"));
 
     final messageEditBuilder = MessageBuilder()
       ..content = 'Edit test'

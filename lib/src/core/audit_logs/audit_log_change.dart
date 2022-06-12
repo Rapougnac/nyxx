@@ -14,7 +14,7 @@ abstract class IAuditLogChange {
 
 /// Represents change made in guild with old and new value
 ///
-/// [Look here for more](https://discordapp.com/developers/docs/resources/audit-log)
+/// [Look here for more](https://discord.com/developers/docs/resources/audit-log)
 class AuditLogChange implements IAuditLogChange {
   /// New value
   @override
