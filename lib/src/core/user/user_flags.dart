@@ -1,5 +1,7 @@
 import 'package:nyxx/src/utils/permissions.dart';
 
+/// Additional flags associated with user account. Describes if user has certain
+/// features like joined into one of houses or is discord employee.
 abstract class IUserFlags {
   /// True if user is discord employee
   bool get discordEmployee;
@@ -40,8 +42,11 @@ abstract class IUserFlags {
   /// True if user is Early Verified Bot Developer
   bool get earlyVerifiedBotDeveloper;
 
-  /// rue if user is Discord Certified Moderator
+  /// True if user is Discord Certified Moderator
   bool get certifiedModerator;
+
+  /// True if bot uses only [HTTP interactions](https://discord.com/developers/docs/interactions/receiving-and-responding#receiving-an-interaction) and is shown in the online member list.
+  bool get botHttpInteractions;
 
   /// Raw flags value
   int get raw;
@@ -101,9 +106,12 @@ class UserFlags implements IUserFlags {
   @override
   bool get earlyVerifiedBotDeveloper => PermissionsUtils.isApplied(raw, 1 << 17);
 
-  /// rue if user is Discord Certified Moderator
+  /// True if user is Discord Certified Moderator
   @override
   bool get certifiedModerator => PermissionsUtils.isApplied(raw, 1 << 18);
+
+  @override
+  bool get botHttpInteractions => PermissionsUtils.isApplied(raw, 1 << 19);
 
   /// Raw flags value
   @override
