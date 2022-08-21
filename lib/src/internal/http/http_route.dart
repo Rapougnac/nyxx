@@ -138,6 +138,9 @@ abstract class IHttpRoute {
 
   /// Adds the [`auto-moderation`](https://discord.com/developers/docs/resources/auto-moderation#list-auto-moderation-rules-for-guild) part to this [IHttpRoute].
   void autoModeration();
+
+  /// Adds the [`integrations`](https://discord.com/developers/docs/resources/guild#get-guild-integrations) part to this [IHttpRoute].
+  void integrations({String? id});
 }
 
 class HttpRoute implements IHttpRoute {
@@ -290,4 +293,7 @@ class HttpRoute implements IHttpRoute {
 
   @override
   void autoModeration() => add(HttpRoutePart('auto-moderation'));
+
+  @override
+  void integrations({String? id}) => add(HttpRoutePart('integrations', [if (id != null) HttpRouteParam(id)]));
 }

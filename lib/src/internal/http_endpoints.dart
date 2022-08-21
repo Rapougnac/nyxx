@@ -1,5 +1,6 @@
 import 'package:nyxx/src/core/audit_logs/audit_log_entry.dart';
 import 'package:nyxx/src/core/guild/auto_moderation.dart';
+import 'package:nyxx/src/core/guild/guild_integration.dart';
 import 'package:nyxx/src/core/guild/scheduled_event.dart';
 import 'package:nyxx/src/internal/http/http_route.dart';
 import 'package:nyxx/src/nyxx.dart';
@@ -438,6 +439,10 @@ abstract class IHttpEndpoints {
   Future<IAutoModerationRule> editAutoModerationRule(Snowflake guildId, Snowflake ruleId, AutoModerationRuleBuilder builder, {String? auditReason});
 
   Future<void> deleteAutoModerationRule(Snowflake guildId, Snowflake ruleId, {String? auditReason});
+
+  Stream<IIntegration> fetchGuildIntegrations(Snowflake guildId);
+
+  Future<void> deleteGuildIntegration(Snowflake guildId, Snowflake integrationId, {String? auditReason});
 }
 
 class HttpEndpoints implements IHttpEndpoints {
@@ -2262,5 +2267,40 @@ class HttpEndpoints implements IHttpEndpoints {
     }
 
     client.guilds[guildId]?.autoModerationRules.remove(ruleId);
+  }
+
+  @override
+  Stream<IIntegration> fetchGuildIntegrations(Snowflake guildId) async* {
+    final response = await httpHandler.execute(
+      BasicRequest(
+        HttpRoute()
+          ..guilds(id: guildId.toString())
+          ..integrations(),
+      ),
+    );
+
+    if (response is IHttpResponseError) {
+      yield* Stream.error(response);
+    }
+
+    for (final integration in (response as IHttpResponseSuccess).jsonBody as RawApiList) {
+      yield Integration(integration as RawApiMap, client.guilds[guildId]!);
+    }
+  }
+
+  @override
+  Future<void> deleteGuildIntegration(Snowflake guildId, Snowflake integrationId, {String? auditReason}) async {
+    final response = await httpHandler.execute(
+      BasicRequest(
+        HttpRoute()
+          ..guilds(id: guildId.toString())
+          ..integrations(id: integrationId.toString()),
+        method: 'DELETE',
+      ),
+    );
+
+    if (response is IHttpResponseError) {
+      return Future.error(response);
+    }
   }
 }
