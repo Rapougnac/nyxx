@@ -5,6 +5,7 @@ import 'package:nyxx/src/core/channel/invite.dart';
 import 'package:nyxx/src/core/channel/text_channel.dart';
 import 'package:nyxx/src/core/guild/auto_moderation.dart';
 import 'package:nyxx/src/core/guild/guild_feature.dart';
+import 'package:nyxx/src/core/guild/guild_integration.dart';
 import 'package:nyxx/src/core/guild/guild_nsfw_level.dart';
 import 'package:nyxx/src/core/guild/guild_preview.dart';
 import 'package:nyxx/src/core/guild/guild_welcome_screen.dart';
@@ -355,6 +356,12 @@ abstract class IGuild implements SnowflakeEntity {
 
   /// Deletes an auto moderation rule.
   Future<void> deleteAutoModerationRule(Snowflake ruleId, {String? reason});
+
+  /// Fetches all the integrations of this guild.
+  Stream<IIntegration> fetchIntegrations();
+
+  /// Deletes an integration.
+  Future<void> deleteIntegration(Snowflake integrationId, {String? reason});
 }
 
 class Guild extends SnowflakeEntity implements IGuild {
@@ -941,4 +948,10 @@ class Guild extends SnowflakeEntity implements IGuild {
 
   @override
   Future<void> deleteAutoModerationRule(Snowflake ruleId, {String? reason}) => client.httpEndpoints.deleteAutoModerationRule(id, ruleId, auditReason: reason);
+
+  @override
+  Stream<IIntegration> fetchIntegrations() => client.httpEndpoints.fetchGuildIntegrations(id);
+
+  @override
+  Future<void> deleteIntegration(Snowflake integrationId, {String? reason}) => client.httpEndpoints.deleteGuildIntegration(id, integrationId, auditReason: reason);
 }
