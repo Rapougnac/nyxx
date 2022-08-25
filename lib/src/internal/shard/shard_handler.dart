@@ -38,6 +38,7 @@ Protocol used to communicate with shard isolate.
 
  * INIT - inits ws connection
  * CONNECT - sent when ws connection is established. additional data can contain if reconnected.
+ * RESUME - sent when ws connection is resuming.
  * SEND - sent along with data to send via websocket
 */
 Future<void> shardHandler(SendPort shardPort) async {
@@ -51,6 +52,7 @@ Future<void> shardHandler(SendPort shardPort) async {
   /// Initial data init
   final initData = await receiveStream.first;
   final gatewayUri = Constants.gatewayUri(initData["gatewayUrl"] as String, initData["compression"] as bool);
+  // final gatewayReconnectUri = Constants.gatewayUri(initData, useCompression)
 
   WebSocket? _socket;
   StreamSubscription<dynamic>? _socketSubscription;
@@ -63,9 +65,9 @@ Future<void> shardHandler(SendPort shardPort) async {
   }
 
   // Attempts to connect to ws
-  Future<void> _connect() async {
+  Future<void> _connect(Uri gatewayUriToConnectTo) async {
     try {
-      _socket = await WebSocket.connect(gatewayUri.toString());
+      _socket = await WebSocket.connect(gatewayUriToConnectTo.toString());
       _socket!.pingInterval = const Duration(seconds: 20);
       final zlibDecoder = RawZLibFilter.inflateFilter(); // Create zlib decoder specific to this connection. New connection should get new zlib context
 
@@ -93,8 +95,10 @@ Future<void> shardHandler(SendPort shardPort) async {
     }
   }
 
+  Future<void> _resume(Uri resumeGatewayUri) => _connect(resumeGatewayUri);
+
   // Connects
-  await _connect();
+  await _connect(gatewayUri);
 
   await for (final message in receiveStream) {
     final cmd = message["cmd"];
@@ -108,15 +112,21 @@ Future<void> shardHandler(SendPort shardPort) async {
     }
 
     if (cmd == "CONNECT") {
-      await _socketSubscription?.cancel();
-      await _socket?.close(1000);
-      await _connect();
-
+      await _connect(gatewayUri);
       continue;
     }
 
     if (cmd == "KILL") {
       await terminate();
+    }
+
+    if (cmd == 'RESUME') {
+      await _socketSubscription?.cancel();
+      await _socket?.close(1000);
+      await _resume(
+        Constants.gatewayUri(message['resumeGatewayUrl'] as String, message['compression'] as bool),
+      );
+      continue;
     }
   }
 }

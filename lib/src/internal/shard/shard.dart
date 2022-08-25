@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math';
 
 import 'package:nyxx/src/core/snowflake.dart';
 import 'package:nyxx/src/core/guild/client_user.dart';
@@ -126,6 +127,7 @@ class Shard implements IShard {
   Duration _gatewayLatency = const Duration(); // latency of discord
   late DateTime _lastHeartbeatSent; // Datetime when last heartbeat was sent
   bool _heartbeatAckReceived = true; // True if last heartbeat was acked
+  String? _resumeGatewayUrl; // Resume url to handle reconnections
 
   WebsocketEventController get eventController => manager.connectionManager.client.eventsWs as WebsocketEventController;
 
@@ -219,6 +221,7 @@ class Shard implements IShard {
 
     if (!_heartbeatAckReceived) {
       manager.logger.warning("Not received previous heartbeat ack on shard: [$id] on sequence: [{$_sequence}]");
+      _reconnect();
       return;
     }
 
@@ -226,6 +229,11 @@ class Shard implements IShard {
   }
 
   void _handleError(dynamic data) {
+    // if (_resume) {
+    //   _resume = false;
+    //   return;
+    // }
+
     final closeCode = data["errorCode"] as int?;
 
     if (closeCode == null) {
@@ -275,7 +283,11 @@ class Shard implements IShard {
   void _reconnect() {
     manager.logger.info("Resuming connection to gateway on shard $id!");
     _resume = true;
-    Future.delayed(const Duration(seconds: 1), () => _sendPort.send({"cmd": "CONNECT"}));
+    Future.delayed(
+      const Duration(seconds: 1),
+      () => _sendPort
+          .send({"cmd": "RESUME", 'resumeGatewayUrl': _resumeGatewayUrl, 'compression': manager.connectionManager.client.options.compressedGatewayPayloads}),
+    );
   }
 
   Future<void> _handle(dynamic rawData) async {
@@ -335,7 +347,7 @@ class Shard implements IShard {
           send(OPCodes.resume, <String, dynamic>{"token": manager.connectionManager.client.token, "session_id": _sessionId, "seq": _sequence});
         }
 
-        Future.delayed(const Duration(milliseconds: 100), () {
+        Future.delayed(Duration(milliseconds: (rawPayload["d"]["heartbeat_interval"] as int) * Random().nextInt(1)), () {
           _heartbeatTimer = Timer.periodic(Duration(milliseconds: rawPayload["d"]["heartbeat_interval"] as int), (Timer t) => _heartbeat());
         });
         break;
@@ -361,6 +373,7 @@ class Shard implements IShard {
           case "READY":
             _sessionId = rawPayload["d"]["session_id"] as String;
             manager.connectionManager.client.self = ClientUser(manager.connectionManager.client, rawPayload["d"]["user"] as RawApiMap);
+            _resumeGatewayUrl = rawPayload['d']['resume_gateway_url'] as String;
 
             _connected = true;
             manager.logger.info("Shard $id ready!");
