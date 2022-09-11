@@ -25,9 +25,8 @@ abstract class IIntegration implements SnowflakeEntity {
   /// The [IRole] that this integration uses for subscribers.
   IRole? get role;
 
-  // /// The roles managed by this integration.
-  // Map<Snowflake, IRole> get manangedRoles => Map.from(guild.roles)
-  //   ..removeWhere((id, role) => role.roleTags?.integrationId != this.id);
+  /// The roles managed by this integration.
+  Map<Snowflake, IRole> get manangedRoles;
 
   /// Whether emoticons should be synced for this integration ([IntegrationType.twitch] only currently).
   bool? get enableEmoticons;
@@ -97,6 +96,10 @@ class Integration extends SnowflakeEntity implements IIntegration {
 
   @override
   late final IRole? role;
+
+  @override
+  // TODO
+  Map<Snowflake, IRole> get manangedRoles => {};
 
   @override
   late final bool? enableEmoticons;
