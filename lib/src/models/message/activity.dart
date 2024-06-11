@@ -29,7 +29,9 @@ enum MessageActivityType {
   join._(1),
   spectate._(2),
   listen._(3),
-  joinRequest._(5);
+  joinRequest._(5),
+
+  unknown._(-1);
 
   /// The value of this [MessageActivityType].
   final int value;
@@ -41,7 +43,7 @@ enum MessageActivityType {
   /// [value] must be a valid message activity type.
   factory MessageActivityType.parse(int value) => MessageActivityType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown MessageActivityType', value),
+        orElse: () => MessageActivityType.unknown,
       );
 
   @override

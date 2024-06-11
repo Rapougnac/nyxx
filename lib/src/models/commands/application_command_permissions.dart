@@ -77,7 +77,9 @@ class CommandPermission with ToStringHelper {
 enum CommandPermissionType {
   role._(1),
   user._(2),
-  channel._(3);
+  channel._(3),
+
+  unknown._(-1);
 
   /// The value of this [CommandPermissionType].
   final int value;
@@ -89,7 +91,7 @@ enum CommandPermissionType {
   /// The [value] must be a valid command permission type.
   factory CommandPermissionType.parse(int value) => CommandPermissionType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown command permission type', value),
+        orElse: () => CommandPermissionType.unknown,
       );
 
   @override

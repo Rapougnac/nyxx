@@ -111,7 +111,9 @@ enum InteractionCallbackType {
   updateMessage._(7),
   applicationCommandAutocompleteResult._(8),
   modal._(9),
-  premiumRequired._(10);
+  premiumRequired._(10),
+
+  unknown._(-1);
 
   final int value;
 

@@ -88,7 +88,9 @@ enum AutoModerationEventType {
   messageSend._(1),
 
   /// When a member edits their profile.
-  memberUpdate._(2);
+  memberUpdate._(2),
+
+  unknown._(-1);
 
   /// The value of this [AutoModerationEventType].
   final int value;
@@ -100,7 +102,7 @@ enum AutoModerationEventType {
   /// The [value] must be a valid auto moderation event type.
   factory AutoModerationEventType.parse(int value) => AutoModerationEventType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown auto moderation event type', value),
+        orElse: () => AutoModerationEventType.unknown,
       );
 
   @override
@@ -122,7 +124,9 @@ enum TriggerType {
   mentionSpam._(5),
 
   /// Check if member profile contains words from a user defined list of keywords.
-  memberProfile._(6);
+  memberProfile._(6),
+
+  unknown._(-1);
 
   /// The value of this [TriggerType].
   final int value;
@@ -134,7 +138,7 @@ enum TriggerType {
   /// The [value] must be a valid trigger type.
   factory TriggerType.parse(int value) => TriggerType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown trigger type', value),
+        orElse: () => TriggerType.unknown,
       );
 
   @override
@@ -192,7 +196,9 @@ class TriggerMetadata with ToStringHelper implements TriggerMetadataBuilder {
 enum KeywordPresetType {
   profanity._(1),
   sexualContent._(2),
-  slurs._(3);
+  slurs._(3),
+
+  unknown._(-1);
 
   /// The value of this [KeywordPresetType].
   final int value;
@@ -204,7 +210,7 @@ enum KeywordPresetType {
   /// The [value] must be a valid keyword preset type.
   factory KeywordPresetType.parse(int value) => KeywordPresetType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown keyword preset type', value),
+        orElse: () => KeywordPresetType.unknown,
       );
 
   @override
@@ -241,7 +247,9 @@ class AutoModerationAction with ToStringHelper implements AutoModerationActionBu
 enum ActionType {
   blockMessage._(1),
   sendAlertMessage._(2),
-  timeout._(3);
+  timeout._(3),
+
+  unknown._(-1);
 
   /// The value of this [ActionType].
   final int value;
@@ -253,7 +261,7 @@ enum ActionType {
   /// The [value] must be a valid action type.
   factory ActionType.parse(int value) => ActionType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown action type', value),
+        orElse: () => ActionType.unknown,
       );
 
   @override

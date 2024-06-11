@@ -121,7 +121,9 @@ enum EventStatus {
   scheduled._(1),
   active._(2),
   completed._(3),
-  cancelled._(4);
+  cancelled._(4),
+
+  unknown._(-1);
 
   /// TThe value of this [EventStatus].
   final int value;
@@ -133,7 +135,7 @@ enum EventStatus {
   /// The [value] must be a valid event status.
   factory EventStatus.parse(int value) => EventStatus.values.firstWhere(
         (status) => status.value == value,
-        orElse: () => throw FormatException('Unknown event status', value),
+        orElse: () => EventStatus.unknown,
       );
 
   @override
@@ -144,7 +146,9 @@ enum EventStatus {
 enum ScheduledEntityType {
   stageInstance._(1),
   voice._(2),
-  external._(3);
+  external._(3),
+
+  unknown._(-1);
 
   /// The value of this [ScheduledEntityType].
   final int value;
@@ -156,7 +160,7 @@ enum ScheduledEntityType {
   /// The [value] must be a valid scheduled entity type.
   factory ScheduledEntityType.parse(int value) => ScheduledEntityType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown scheduled entity type', value),
+        orElse: () => ScheduledEntityType.unknown,
       );
 
   @override

@@ -21,7 +21,9 @@ class TestEntitlementBuilder extends CreateBuilder<Entitlement> {
 
 enum TestEntitlementType {
   guildSubscription._(1),
-  userSubscription._(2);
+  userSubscription._(2),
+
+  unknown._(-1);
 
   final int value;
 

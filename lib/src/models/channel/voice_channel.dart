@@ -21,7 +21,9 @@ enum VideoQualityMode {
   auto._(1),
 
   /// 720p.
-  full._(2);
+  full._(2),
+
+  unknown._(-1);
 
   /// The value of this [VideoQualityMode].
   final int value;
@@ -33,7 +35,7 @@ enum VideoQualityMode {
   /// [value] must be a valid [VideoQualityMode].
   factory VideoQualityMode.parse(int value) => VideoQualityMode.values.firstWhere(
         (mode) => mode.value == value,
-        orElse: () => throw FormatException('Unknown VideoQualityMode', value),
+        orElse: () => VideoQualityMode.unknown,
       );
 
   @override

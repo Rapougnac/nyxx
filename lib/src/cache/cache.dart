@@ -22,7 +22,18 @@ class CacheConfig<T> {
   const CacheConfig({this.maxSize, this.shouldCache});
 }
 
-typedef _CacheKey = ({String identifier, Snowflake key});
+// typedef _CacheKey = ({String identifier, Snowflake key});
+
+class _CacheKey implements Comparable<_CacheKey> {
+  final String identifier;
+  final Snowflake key;
+
+  const _CacheKey({required this.identifier, required this.key});
+
+  @override
+  // Assume we always compare to another _CacheKey
+  int compareTo(_CacheKey other) => key.compareTo(other.key);
+}
 
 class _CacheEntry {
   Object? value;
@@ -35,7 +46,16 @@ class _CacheEntry {
 class Cache<T> with MapMixin<Snowflake, T> {
   static final Expando<Map<_CacheKey, _CacheEntry>> _stores = Expando('Cache store');
 
-  Map<_CacheKey, _CacheEntry> get _store => _stores[client] ??= {};
+  Map<_CacheKey, _CacheEntry> get _store {
+    if (_stores[client] == null) {
+      return _stores[client] = LinkedHashMap<_CacheKey, _CacheEntry>(
+        equals: (a, b) => a.key == b.key && a.identifier == b.identifier,
+        hashCode: (key) => key.key.hashCode ^ key.identifier.hashCode,
+      );
+    }
+
+    return _stores[client]!;
+  }
 
   /// The configuration for this cache.
   final CacheConfig<T> config;
@@ -56,10 +76,21 @@ class Cache<T> with MapMixin<Snowflake, T> {
   /// Items are retained based on the number of accesses they have until the [CacheConfig.maxSize]
   /// is respected.
   void filterItems() {
-    final keys = List.of(_store.keys.where((element) => element.identifier == identifier));
+    // final keys = List.of(_store.keys.where((element) => element.identifier == identifier));
+    final keys = _store.keys.where((element) => element.identifier == identifier).toList();
+    // final keys = <_CacheKey>[];
+    // final sortedKeys = SplayTreeMap<_CacheKey, _CacheEntry>();
+
+    // for (final entry in _store.entries) {
+    //   if (entry.key.identifier == identifier) {
+    //     keys.add(entry.key);
+    //     // sortedKeys[entry.key] = entry.value;
+    //   }
+    // }
 
     if (config.maxSize != null && keys.length > config.maxSize!) {
       keys.sort((a, b) => _store[a]!.accessCount.compareTo(_store[b]!.accessCount));
+      // final sortedKeys = SplayTreeMap.from(_store, (a, b) => _store[a]!.accessCount.compareTo(_store[b]!.accessCount));
 
       final overflow = keys.length - config.maxSize!;
 
@@ -93,13 +124,17 @@ class Cache<T> with MapMixin<Snowflake, T> {
       return;
     }
 
-    _store.update(
-      (identifier: identifier, key: key),
-      (entry) => entry
-        ..value = value
-        ..accessCount ~/= 2,
-      ifAbsent: () => _CacheEntry(value),
-    );
+    // _store.update(
+    //   _CacheKey(identifier: identifier, key: key),
+    //   (entry) => entry
+    //     ..value = value
+    //     ..accessCount ~/= 2,
+    //   ifAbsent: () => _CacheEntry(value),
+    // );
+
+    final cacheKey = _CacheKey(identifier: identifier, key: key);
+    _store.remove(cacheKey);
+    _store[cacheKey] = _CacheEntry(value);
 
     scheduleFilterItems();
   }

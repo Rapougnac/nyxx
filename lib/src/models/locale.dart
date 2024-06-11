@@ -34,7 +34,9 @@ enum Locale {
   zhCn._('zh-CN', 'Chinese, China', '中文'),
   ja._('ja', 'Japanese', '日本語'),
   zhTw._('zh-TW', 'Chinese, Taiwan', '繁體中文'),
-  ko._('ko', 'Korean', '한국어');
+  ko._('ko', 'Korean', '한국어'),
+
+  unknown._('unknown', 'Unknown', 'Unknown');
 
   /// The identifier for this locale.
   final String identifier;
@@ -53,7 +55,7 @@ enum Locale {
   /// the listed locales.
   factory Locale.parse(String identifier) => Locale.values.firstWhere(
         (locale) => locale.identifier == identifier,
-        orElse: () => throw FormatException('Unknown Locale', identifier),
+        orElse: () => Locale.unknown,
       );
 
   @override

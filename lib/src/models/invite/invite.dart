@@ -74,7 +74,9 @@ enum TargetType {
   stream._(1),
 
   /// The invite is targeting an embedded application.
-  embeddedApplication._(2);
+  embeddedApplication._(2),
+
+  unknown._(-1);
 
   /// The value of this [TargetType].
   final int value;
@@ -84,7 +86,7 @@ enum TargetType {
   /// The [value] must be a valid target type.
   factory TargetType.parse(int value) => TargetType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown TargetType', value),
+        orElse: () => TargetType.unknown,
       );
 
   const TargetType._(this.value);

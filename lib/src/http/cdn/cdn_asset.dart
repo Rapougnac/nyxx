@@ -24,7 +24,10 @@ enum CdnFormat {
   /// The Lottie format.
   ///
   /// This is only available to sticker endpoints where [Sticker.formatType] is [StickerFormatType.lottie].
-  lottie._('lottie');
+  lottie._('lottie'),
+
+  /// Unknown format.
+  unknown._('unknown');
 
   /// The extension to use on the CDN endpoint for this format.
   final String extension;

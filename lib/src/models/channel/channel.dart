@@ -86,7 +86,9 @@ enum ChannelType {
   guildForum._(15),
 
   /// A media channel in a [Guild].
-  guildMedia._(16);
+  guildMedia._(16),
+
+  unknown._(-1);
 
   /// The value of this [ChannelType].
   final int value;
@@ -98,7 +100,7 @@ enum ChannelType {
   /// The [value] must be a valid channel type.
   factory ChannelType.parse(int value) => ChannelType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown channel type', value),
+        orElse: () => ChannelType.unknown,
       );
 
   @override

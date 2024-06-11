@@ -186,7 +186,9 @@ class DefaultReaction with ToStringHelper {
 /// The sorting order in a [ForumChannel].
 enum ForumSort {
   latestActivity._(0),
-  creationDate._(1);
+  creationDate._(1),
+
+  unknown._(-1);
 
   /// The value of this forum sort.
   final int value;
@@ -198,7 +200,7 @@ enum ForumSort {
   /// The [value] must be a valid forum sort.
   factory ForumSort.parse(int value) => ForumSort.values.firstWhere(
         (sort) => sort.value == value,
-        orElse: () => throw FormatException('Unknown forum sort', value),
+        orElse: () => ForumSort.unknown,
       );
 
   @override
@@ -209,7 +211,9 @@ enum ForumSort {
 enum ForumLayout {
   notSet._(0),
   listView._(1),
-  galleryView._(2);
+  galleryView._(2),
+
+  unknown._(-1);
 
   /// The value of this forum layout.
   final int value;
@@ -221,7 +225,7 @@ enum ForumLayout {
   /// The [value] must be a valid forum layout.
   factory ForumLayout.parse(int value) => ForumLayout.values.firstWhere(
         (layout) => layout.value == value,
-        orElse: () => throw FormatException('Unknown forum layout', value),
+        orElse: () => ForumLayout.unknown,
       );
 
   @override

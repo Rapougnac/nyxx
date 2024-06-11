@@ -181,7 +181,9 @@ enum WebhookType {
   channelFollower._(2),
 
   /// A webhook for use with interactions.
-  application._(3);
+  application._(3),
+
+  unknown._(-1);
 
   /// The value of this webhook type.
   final int value;
@@ -193,7 +195,7 @@ enum WebhookType {
   /// The [value] must be a valid webhook type.
   factory WebhookType.parse(int value) => WebhookType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown webhook type', value),
+        orElse: () => WebhookType.unknown,
       );
 
   @override

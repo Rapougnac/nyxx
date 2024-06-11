@@ -12,7 +12,9 @@ enum MessageComponentType {
   userSelect._(5),
   roleSelect._(6),
   mentionableSelect._(7),
-  channelSelect._(8);
+  channelSelect._(8),
+
+  unknown._(-1);
 
   /// The value of this [MessageComponentType].
   final int value;
@@ -24,7 +26,7 @@ enum MessageComponentType {
   /// The [value] must be a valid message component type.
   factory MessageComponentType.parse(int value) => MessageComponentType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown message component type', value),
+        orElse: () => MessageComponentType.unknown,
       );
 
   @override
@@ -91,7 +93,9 @@ enum ButtonStyle {
   secondary._(2),
   success._(3),
   danger._(4),
-  link._(5);
+  link._(5),
+
+  unknown._(-1);
 
   /// The value of this [ButtonStyle].
   final int value;
@@ -103,7 +107,7 @@ enum ButtonStyle {
   /// The [value] must be a valid button style.
   factory ButtonStyle.parse(int value) => ButtonStyle.values.firstWhere(
         (style) => style.value == value,
-        orElse: () => throw FormatException('Unknown button style', value),
+        orElse: () => ButtonStyle.unknown,
       );
 
   @override
@@ -162,7 +166,9 @@ class SelectMenuComponent extends MessageComponent {
 enum SelectMenuDefaultValueType {
   user._('user'),
   role._('role'),
-  channel._('channel');
+  channel._('channel'),
+
+  unknown._('unknown');
 
   /// The value of this [SelectMenuDefaultValue].
   final String value;
@@ -174,7 +180,7 @@ enum SelectMenuDefaultValueType {
   /// The [value] must be a valid select menu default value type.
   factory SelectMenuDefaultValueType.parse(String value) => SelectMenuDefaultValueType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown select menu default value type', value),
+        orElse: () => SelectMenuDefaultValueType.unknown,
       );
 }
 
@@ -265,7 +271,9 @@ class TextInputComponent extends MessageComponent {
 /// The type of a [TextInputComponent].
 enum TextInputStyle {
   short._(1),
-  paragraph._(2);
+  paragraph._(2),
+
+  unknown._(-1);
 
   /// The value of this [TextInputStyle].
   final int value;
@@ -277,7 +285,7 @@ enum TextInputStyle {
   /// The [value] must beb a valid text input style.
   factory TextInputStyle.parse(int value) => TextInputStyle.values.firstWhere(
         (style) => style.value == value,
-        orElse: () => throw FormatException('Unknown text input style', value),
+        orElse: () => TextInputStyle.unknown,
       );
 
   @override

@@ -103,7 +103,9 @@ class ApplicationCommand extends PartialApplicationCommand {
 enum ApplicationCommandType {
   chatInput._(1),
   user._(2),
-  message._(3);
+  message._(3),
+
+  unknown._(-1);
 
   /// The value of this [ApplicationCommandType].
   final int value;
@@ -115,7 +117,7 @@ enum ApplicationCommandType {
   /// The [value] must be a valid application command type.
   factory ApplicationCommandType.parse(int value) => ApplicationCommandType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown application command type', value),
+        orElse: () => ApplicationCommandType.unknown,
       );
 
   @override

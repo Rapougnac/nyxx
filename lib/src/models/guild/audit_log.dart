@@ -137,7 +137,9 @@ enum AuditLogEvent {
   autoModerationFlagToChannel._(144),
   autoModerationUserCommunicationDisabled._(145),
   creatorMonetizationRequestCreated._(150),
-  creatorMonetizationTermsAccepted._(151);
+  creatorMonetizationTermsAccepted._(151),
+
+  unknown._(-1);
 
   /// The value of this [AuditLogEvent].
   final int value;
@@ -149,7 +151,7 @@ enum AuditLogEvent {
   /// The [value] must be a valid audit log event.
   factory AuditLogEvent.parse(int value) => AuditLogEvent.values.firstWhere(
         (event) => event.value == value,
-        orElse: () => throw FormatException('Unknown audit log event', value),
+        orElse: () => AuditLogEvent.unknown,
       );
 
   @override

@@ -84,7 +84,9 @@ class OnboardingPrompt with ToStringHelper {
 /// The type of an [Onboarding] prompt.
 enum OnboardingPromptType {
   multipleChoice._(0),
-  dropdown._(1);
+  dropdown._(1),
+
+  unknown._(-1);
 
   /// The value of this [OnboardingPromptType].
   final int value;
@@ -96,7 +98,7 @@ enum OnboardingPromptType {
   /// The [value] must be a valid onboarding prompt type.
   factory OnboardingPromptType.parse(int value) => OnboardingPromptType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown onboarding prompt type', value),
+        orElse: () => OnboardingPromptType.unknown,
       );
 
   @override

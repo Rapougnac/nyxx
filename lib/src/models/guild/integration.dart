@@ -96,7 +96,9 @@ class Integration extends PartialIntegration {
 /// The behavior of an integration when a member's subscription expires.
 enum IntegrationExpireBehavior {
   removeRole._(0),
-  kick._(1);
+  kick._(1),
+
+  unknown._(-1);
 
   /// TThe value of this [IntegrationExpireBehavior].
   final int value;
@@ -108,7 +110,7 @@ enum IntegrationExpireBehavior {
   /// The [value] must be a valid integration expire behavior.
   factory IntegrationExpireBehavior.parse(int value) => IntegrationExpireBehavior.values.firstWhere(
         (behavior) => behavior.value == value,
-        orElse: () => throw FormatException('Unknown integration expire behavior', value),
+        orElse: () => IntegrationExpireBehavior.unknown,
       );
 
   @override

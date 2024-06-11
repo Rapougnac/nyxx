@@ -81,7 +81,9 @@ enum CommandOptionType {
   role._(8),
   mentionable._(9),
   number._(10),
-  attachment._(11);
+  attachment._(11),
+
+  unknown._(-1);
 
   /// The value of this [CommandOptionType].
   final int value;
@@ -93,7 +95,7 @@ enum CommandOptionType {
   /// The [value] must be a valid command option type.
   factory CommandOptionType.parse(int value) => CommandOptionType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown command option type', value),
+        orElse: () => CommandOptionType.unknown,
       );
 
   @override

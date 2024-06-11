@@ -33,7 +33,9 @@ enum InteractionContextType {
   botDm._(1),
 
   /// Interaction can be used within Group DMs and DMs other than the app's bot user.
-  privateChannel._(2);
+  privateChannel._(2),
+
+  unknown._(-1);
 
   /// The value of this [InteractionContextType].
   final int value;
@@ -432,7 +434,9 @@ enum InteractionType {
   applicationCommand._(2),
   messageComponent._(3),
   applicationCommandAutocomplete._(4),
-  modalSubmit._(5);
+  modalSubmit._(5),
+
+  unknown._(-1);
 
   /// The value of this [InteractionType].
   final int value;
@@ -444,7 +448,7 @@ enum InteractionType {
   /// The [value] must be a valid interaction type.
   factory InteractionType.parse(int value) => InteractionType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown interaction type', value),
+        orElse: () => InteractionType.unknown,
       );
 
   @override

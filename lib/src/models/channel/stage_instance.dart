@@ -60,7 +60,9 @@ class StageInstance extends SnowflakeEntity<StageInstance> {
 /// The privacy level of a [StageInstance].
 enum PrivacyLevel {
   public._(1),
-  guildOnly._(2);
+  guildOnly._(2),
+
+  unknown._(-1);
 
   final int value;
 
@@ -71,6 +73,6 @@ enum PrivacyLevel {
   /// The [value] must be a valid privacy level.
   factory PrivacyLevel.parse(int value) => PrivacyLevel.values.firstWhere(
         (level) => level.value == value,
-        orElse: () => throw FormatException('Unknown privacy level', value),
+        orElse: () => PrivacyLevel.unknown,
       );
 }

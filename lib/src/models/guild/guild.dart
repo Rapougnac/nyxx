@@ -471,7 +471,9 @@ enum VerificationLevel {
   low._(1),
   medium._(2),
   high._(3),
-  veryHigh._(4);
+  veryHigh._(4),
+
+  unknown._(-1);
 
   /// The value of this verification level.
   final int value;
@@ -483,7 +485,7 @@ enum VerificationLevel {
   /// The [value] must be a valid verification level.
   factory VerificationLevel.parse(int value) => VerificationLevel.values.firstWhere(
         (level) => level.value == value,
-        orElse: () => throw FormatException('Invalid verification level', value),
+        orElse: () => VerificationLevel.unknown,
       );
 
   @override
@@ -493,7 +495,9 @@ enum VerificationLevel {
 /// The level at which message notifications are sent in a guild.
 enum MessageNotificationLevel {
   allMessages._(0),
-  onlyMentions._(1);
+  onlyMentions._(1),
+
+  unknown._(-1);
 
   /// The value of this message notification level.
   final int value;
@@ -505,7 +509,7 @@ enum MessageNotificationLevel {
   /// The [value] must be a valid message notification level.
   factory MessageNotificationLevel.parse(int value) => MessageNotificationLevel.values.firstWhere(
         (level) => level.value == value,
-        orElse: () => throw FormatException('Invalid message notification level', value),
+        orElse: () => MessageNotificationLevel.unknown,
       );
 
   @override
@@ -516,7 +520,9 @@ enum MessageNotificationLevel {
 enum ExplicitContentFilterLevel {
   disabled._(0),
   membersWithoutRoles._(1),
-  allMembers._(2);
+  allMembers._(2),
+
+  unknown._(-1);
 
   /// The value of this explicit content filter level.
   final int value;
@@ -528,7 +534,7 @@ enum ExplicitContentFilterLevel {
   /// The [value] must be a valid explicit content filter level.
   factory ExplicitContentFilterLevel.parse(int value) => ExplicitContentFilterLevel.values.firstWhere(
         (level) => level.value == value,
-        orElse: () => throw FormatException('Invalid explicit content filter level', value),
+        orElse: () => ExplicitContentFilterLevel.unknown,
       );
 
   @override
@@ -707,7 +713,9 @@ class GuildFeatures extends Flags<GuildFeatures> {
 /// The MFA level required for moderators of a guild.
 enum MfaLevel {
   none._(0),
-  elevated._(1);
+  elevated._(1),
+
+  unknown._(-1);
 
   /// The value of this MFA level.
   final int value;
@@ -719,7 +727,7 @@ enum MfaLevel {
   /// The [value] must be a valid mfa level.
   factory MfaLevel.parse(int value) => MfaLevel.values.firstWhere(
         (level) => level.value == value,
-        orElse: () => throw FormatException('Invalid mfa level', value),
+        orElse: () => MfaLevel.unknown,
       );
 
   @override
@@ -773,7 +781,9 @@ enum PremiumTier {
   none._(0),
   one._(1),
   two._(2),
-  three._(3);
+  three._(3),
+
+  unknown._(-1);
 
   /// The value of this tier.
   final int value;
@@ -785,7 +795,7 @@ enum PremiumTier {
   /// The [value] must be a valid premium tier.
   factory PremiumTier.parse(int value) => PremiumTier.values.firstWhere(
         (level) => level.value == value,
-        orElse: () => throw FormatException('Invalid premium tier', value),
+        orElse: () => PremiumTier.unknown,
       );
 
   @override
@@ -797,7 +807,9 @@ enum NsfwLevel {
   unset._(0),
   explicit._(1),
   safe._(2),
-  ageRestricted._(3);
+  ageRestricted._(3),
+
+  unknown._(-1);
 
   /// The value of this NSFW level.
   final int value;
@@ -809,7 +821,7 @@ enum NsfwLevel {
   /// The [value] must be a valid nsfw level.
   factory NsfwLevel.parse(int value) => NsfwLevel.values.firstWhere(
         (level) => level.value == value,
-        orElse: () => throw FormatException('Invalid nsfw level', value),
+        orElse: () => NsfwLevel.unknown,
       );
 
   @override

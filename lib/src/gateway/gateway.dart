@@ -1029,6 +1029,8 @@ class Gateway extends GatewayManager with EventParser {
       InteractionType.modalSubmit => InteractionCreateEvent<ModalSubmitInteraction>(gateway: this, interaction: interaction as ModalSubmitInteraction),
       InteractionType.applicationCommandAutocomplete =>
         InteractionCreateEvent<ApplicationCommandAutocompleteInteraction>(gateway: this, interaction: interaction as ApplicationCommandAutocompleteInteraction),
+      // Should not happen, catched by the assert clause.
+      InteractionType.unknown => null,
     } as InteractionCreateEvent<Interaction<dynamic>>;
   }
 

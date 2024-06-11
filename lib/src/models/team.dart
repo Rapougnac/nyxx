@@ -83,7 +83,9 @@ class TeamMember with ToStringHelper {
 /// The status of a member in a [Team].
 enum TeamMembershipState {
   invited._(1),
-  accepted._(2);
+  accepted._(2),
+
+  unknown._(-1);
 
   /// The value of this [TeamMembershipState].
   final int value;
@@ -95,7 +97,7 @@ enum TeamMembershipState {
   /// The [value] must be a valid team membership state.
   factory TeamMembershipState.parse(int value) => TeamMembershipState.values.firstWhere(
         (state) => state.value == value,
-        orElse: () => throw FormatException('Unknown team membership state', value),
+        orElse: () => TeamMembershipState.unknown,
       );
 
   @override
@@ -106,7 +108,9 @@ enum TeamMembershipState {
 enum TeamMemberRole {
   admin._('admin'),
   developer._('developer'),
-  readOnly._('read_only');
+  readOnly._('read_only'),
+
+  unknown._('unknown');
 
   /// The value of this [TeamMemberRole].
   final String value;
@@ -118,7 +122,7 @@ enum TeamMemberRole {
   /// The [value] must be a valid team member role.
   factory TeamMemberRole.parse(String value) => TeamMemberRole.values.firstWhere(
         (role) => role.value == value,
-        orElse: () => throw FormatException('Unknown team member role', value),
+        orElse: () => TeamMemberRole.unknown,
       );
 
   @override

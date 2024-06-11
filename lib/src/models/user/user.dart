@@ -231,7 +231,9 @@ enum NitroType {
   none._(0),
   classic._(1),
   nitro._(2),
-  basic._(3);
+  basic._(3),
+
+  unknown._(-1);
 
   /// The value of this [NitroType].
   final int value;
@@ -243,7 +245,7 @@ enum NitroType {
   /// The [value] must be a valid nitro type.
   factory NitroType.parse(int value) => NitroType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown NitroType', value),
+        orElse: () => NitroType.unknown,
       );
 
   @override

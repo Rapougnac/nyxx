@@ -47,7 +47,9 @@ enum PermissionOverwriteType {
   role._(0),
 
   /// The overwrite applies to a [Member]'s permissions.
-  member._(1);
+  member._(1),
+
+  unknown._(-1);
 
   /// The value of this type.
   final int value;
@@ -59,7 +61,7 @@ enum PermissionOverwriteType {
   /// The [value] must be a valid [PermissionOverwriteType].
   factory PermissionOverwriteType.parse(int value) => PermissionOverwriteType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown PermissionOverwriteType', value),
+        orElse: () => PermissionOverwriteType.unknown,
       );
 
   @override

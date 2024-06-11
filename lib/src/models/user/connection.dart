@@ -78,7 +78,9 @@ enum ConnectionType {
   twitch._('twitch', 'Twitch'),
   twitter._('twitter', 'Twitter'),
   xbox._('xbox', 'Xbox'),
-  youtube._('youtube', 'YouTube');
+  youtube._('youtube', 'YouTube'),
+
+  unknown._('unknown', 'Unknown');
 
   /// The value of this connection type.
   final String value;
@@ -93,7 +95,7 @@ enum ConnectionType {
   /// The [value] must be a string containing a valid [ConnectionType.value].
   factory ConnectionType.parse(String value) => ConnectionType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown ConnectionType', value),
+        orElse: () => ConnectionType.unknown,
       );
 
   @override
@@ -106,7 +108,9 @@ enum ConnectionType {
 /// * Discord API Reference: https://discord.com/developers/docs/resources/user#connection-object-visibility-types
 enum ConnectionVisibility {
   none._(0),
-  everyone._(1);
+  everyone._(1),
+
+  unknown._(-1);
 
   /// THe value of this connection visibility level.
   final int value;
@@ -118,7 +122,7 @@ enum ConnectionVisibility {
   /// The [value] must be a valid [ConnectionVisibility].
   factory ConnectionVisibility.parse(int value) => ConnectionVisibility.values.firstWhere(
         (visibility) => visibility.value == value,
-        orElse: () => throw FormatException('Unknown ConnectionVisibility', value),
+        orElse: () => ConnectionVisibility.unknown,
       );
 
   @override

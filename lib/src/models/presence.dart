@@ -26,7 +26,9 @@ enum UserStatus {
   online._('online'),
   idle._('idle'),
   dnd._('dnd'),
-  offline._('offline');
+  offline._('offline'),
+
+  unknown._('unknown');
 
   /// The value of this [UserStatus].
   final String value;
@@ -38,7 +40,7 @@ enum UserStatus {
   /// The [value] must be a valid user status.
   factory UserStatus.parse(String value) => UserStatus.values.firstWhere(
         (status) => status.value == value,
-        orElse: () => throw FormatException('Unknown user status', value),
+        orElse: () => UserStatus.unknown,
       );
 
   @override
@@ -122,7 +124,9 @@ enum ActivityType {
   listening._(2),
   watching._(3),
   custom._(4),
-  competing._(5);
+  competing._(5),
+
+  unknown._(-1);
 
   /// The value of this [ActivityType].
   final int value;
@@ -134,7 +138,7 @@ enum ActivityType {
   /// The [value] must be a valid activity type.
   factory ActivityType.parse(int value) => ActivityType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown activity type', value),
+        orElse: () => ActivityType.unknown,
       );
 
   @override

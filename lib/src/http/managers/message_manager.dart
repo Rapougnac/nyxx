@@ -247,6 +247,8 @@ class MessageManager extends Manager<Message> {
   MessageComponent parseMessageComponent(Map<String, Object?> raw) {
     final type = MessageComponentType.parse(raw['type'] as int);
 
+    assert (type != MessageComponentType.unknown, 'Unknown message component type: ${raw['type']}');
+
     return switch (type) {
       MessageComponentType.actionRow => ActionRowComponent(
           components: parseMany(raw['components'] as List, parseMessageComponent),
@@ -285,6 +287,8 @@ class MessageManager extends Manager<Message> {
           maxValues: raw['max_values'] as int?,
           isDisabled: raw['disabled'] as bool?,
         ),
+      // Catched by the assert above
+      MessageComponentType.unknown => throw AssertionError('Unknown message component type: ${raw['type']}'),
     };
   }
 

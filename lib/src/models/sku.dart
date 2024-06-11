@@ -53,7 +53,9 @@ enum SkuType {
   /// Consumable one-time purchase.
   consumable._(3),
   subscription._(5),
-  subscriptionGroup._(6);
+  subscriptionGroup._(6),
+
+  unknown._(-1);
 
   final int value;
 
@@ -64,7 +66,7 @@ enum SkuType {
   /// The [value] must be a valid sku type.
   factory SkuType.parse(int value) => SkuType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown SKU type', value),
+        orElse: () => SkuType.unknown,
       );
 
   @override

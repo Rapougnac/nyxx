@@ -188,7 +188,9 @@ enum ApplicationIntegrationType {
   guildInstall._(0),
 
   /// App is installable to users.
-  userInstall._(1);
+  userInstall._(1),
+
+  unknown._(-1);
 
   /// The value of this [ApplicationIntegrationType].
   final int value;
@@ -200,7 +202,7 @@ enum ApplicationIntegrationType {
   /// The [value] must be a valid application integration type.
   factory ApplicationIntegrationType.parse(int value) => ApplicationIntegrationType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown ApplicationIntegrationType', value),
+        orElse: () => ApplicationIntegrationType.unknown,
       );
 
   @override
@@ -334,7 +336,9 @@ enum ConnectionMetadataType {
   dateTimeLessThanOrEqual._(5),
   dateTimeGreaterThanOrEqual._(6),
   booleanEqual._(7),
-  booleanNotEqual._(8);
+  booleanNotEqual._(8),
+
+  unknown._(-1);
 
   /// The value of this [ConnectionMetadataType].
   final int value;
@@ -346,7 +350,7 @@ enum ConnectionMetadataType {
   /// The [value] must be a valid connection metadata type.
   factory ConnectionMetadataType.parse(int value) => ConnectionMetadataType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown connection metadata type', value),
+        orElse: () => ConnectionMetadataType.unknown,
       );
 
   @override

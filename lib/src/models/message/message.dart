@@ -287,7 +287,9 @@ enum MessageType {
   guildIncidentAlertModeEnabled._(36),
   guildIncidentAlertModeDisabled._(37),
   guildIncidentReportRaid._(38),
-  guildIncidentReportFalseAlarm._(39);
+  guildIncidentReportFalseAlarm._(39),
+
+  unknown._(-1);
 
   /// The value of this [MessageType].
   final int value;
@@ -299,7 +301,7 @@ enum MessageType {
   /// [value] must be a valid [MessageType].
   factory MessageType.parse(int value) => MessageType.values.firstWhere(
         (type) => type.value == value,
-        orElse: () => throw FormatException('Unknown MessageType', value),
+        orElse: () => MessageType.unknown,
       );
 
   @override

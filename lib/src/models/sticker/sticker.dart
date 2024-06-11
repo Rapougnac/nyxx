@@ -3,7 +3,9 @@ import 'package:nyxx/src/models/user/user.dart';
 
 enum StickerType {
   standard._(1),
-  guild._(2);
+  guild._(2),
+
+  unknown._(-1);
 
   /// The value of this [StickerType].
   final int value;
@@ -15,7 +17,7 @@ enum StickerType {
   /// The [value] must be a valid sticker type
   factory StickerType.parse(int value) => StickerType.values.firstWhere(
         (state) => state.value == value,
-        orElse: () => throw FormatException('Unknown sticker type', value),
+        orElse: () => StickerType.unknown,
       );
 
   @override
@@ -26,7 +28,9 @@ enum StickerFormatType {
   png._(1),
   apng._(2),
   lottie._(3),
-  gif._(4);
+  gif._(4),
+
+  unknown._(-1);
 
   /// The value of this [StickerFormatType].
   final int value;
@@ -38,7 +42,7 @@ enum StickerFormatType {
   /// The [value] must be a valid sticker format type
   factory StickerFormatType.parse(int value) => StickerFormatType.values.firstWhere(
         (state) => state.value == value,
-        orElse: () => throw FormatException('Unknown sticker format type', value),
+        orElse: () => StickerFormatType.unknown,
       );
 
   @override

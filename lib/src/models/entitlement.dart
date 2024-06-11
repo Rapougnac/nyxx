@@ -99,7 +99,9 @@ enum EntitlementType {
   premiumPurchase._(7),
 
   /// Entitlement was purchased as an app subscription.
-  applicationSubscription._(8);
+  applicationSubscription._(8),
+
+  unknown._(-1);
 
   final int value;
 
@@ -107,7 +109,7 @@ enum EntitlementType {
 
   factory EntitlementType.parse(int value) => EntitlementType.values.firstWhere(
         (element) => element.value == value,
-        orElse: () => throw FormatException('Unknown entitlement type', value),
+        orElse: () => EntitlementType.unknown,
       );
 
   @override
