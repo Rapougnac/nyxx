@@ -35,16 +35,7 @@ class _CacheEntry {
 class Cache<T> with MapMixin<Snowflake, T> {
   static final Expando<Map<_CacheKey, _CacheEntry>> _stores = Expando('Cache store');
 
-  Map<_CacheKey, _CacheEntry> get _store {
-    if (_stores[client] == null) {
-      return _stores[client] = LinkedHashMap<_CacheKey, _CacheEntry>(
-        equals: (a, b) => a.key == b.key && a.identifier == b.identifier,
-        hashCode: (key) => key.key.hashCode ^ key.identifier.hashCode,
-      );
-    }
-
-    return _stores[client]!;
-  }
+  Map<_CacheKey, _CacheEntry> get _store => _stores[client] ??= {};
 
   /// The configuration for this cache.
   final CacheConfig<T> config;
