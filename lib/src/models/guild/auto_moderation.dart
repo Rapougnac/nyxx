@@ -248,6 +248,7 @@ enum ActionType {
   blockMessage._(1),
   sendAlertMessage._(2),
   timeout._(3),
+  blockMemberInteraction._(4),
 
   unknown._(-1);
 
