@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:nyxx/src/builders/sound.dart';
+import 'package:nyxx/src/builders/soundboard.dart';
+import 'package:nyxx/src/models/soundboard/soundboard.dart';
 import 'package:test/test.dart' hide completes;
 
 import '../function_completes.dart';
@@ -49,6 +52,9 @@ void main() {
     });
 
     tearDownAll(() async {
+      // Reset commands state in case we failed a test without deleting them.
+      await client.commands.bulkOverride([]);
+
       await client.close();
     });
 
@@ -64,8 +70,11 @@ void main() {
       late Application application;
 
       await expectLater(() async => application = await client.applications.fetchCurrentApplication(), completes);
-      await expectLater(application.listSkus(), completes);
       await expectLater(client.applications.updateCurrentApplication(ApplicationUpdateBuilder(description: application.description)), completes);
+    });
+
+    test('skus', () async {
+      await expectLater(client.application.skus.list(), completes);
     });
 
     test('users', () async {
@@ -121,6 +130,21 @@ void main() {
 
       await expectLater(message.pin(), completes);
       await expectLater(message.unpin(), completes);
+
+      await expectLater(
+        () async => message = await channel.sendMessage(MessageBuilder(
+          referencedMessage: MessageReferenceBuilder.forward(messageId: message.id, channelId: channelId),
+        )),
+        completes,
+      );
+
+      await expectLater(
+        message.reference?.message?.delete(),
+        allOf(
+          isNotNull,
+          completes,
+        ),
+      );
 
       await expectLater(message.delete(), completes);
 
@@ -394,7 +418,7 @@ void main() {
 
       await expectLater(command.fetch(), completes);
       await expectLater(command.update(ApplicationCommandUpdateBuilder.chatInput(name: 'new_name')), completes);
-      await expectLater(client.commands.list(), completion(isNotEmpty));
+      await expectLater(client.commands.list(), completion(contains(command)));
       await expectLater(
         () async => command =
             (await client.commands.bulkOverride([ApplicationCommandBuilder.chatInput(name: 'test_2', description: 'A test command', options: [])])).single,
@@ -410,6 +434,28 @@ void main() {
       }
 
       await expectLater(command.delete(), completes);
+    });
+
+    test('Soundboard', skip: testGuild != null ? false : 'No test guild provided', () async {
+      final guildId = Snowflake.parse(testGuild!);
+      final guild = client.guilds[guildId];
+
+      await expectLater(guild.soundboard.list(), completion(isEmpty));
+
+      late SoundboardSound sound;
+      await expectLater(
+        () async => sound = await guild.soundboard.create(
+          SoundboardSoundBuilder(
+            name: 'Test sound',
+            volume: 0.5,
+            sound: await SoundBuilder.fromFile(File('test/files/sound.ogg')),
+          ),
+        ),
+        completes,
+      );
+
+      await expectLater(sound.update(SoundboardSoundUpdateBuilder(name: 'New name')), completes);
+      await expectLater(sound.delete(), completes);
     });
   });
 }

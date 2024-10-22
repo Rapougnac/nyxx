@@ -46,7 +46,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
 
   /// Create a new [ChannelManager].
   ChannelManager(super.config, super.client, {required CacheConfig<StageInstance> stageInstanceConfig})
-      : stageInstanceCache = Cache(client, 'channels.stageInstances', stageInstanceConfig),
+      : stageInstanceCache = client.cache.getCache('channels.stageInstances', stageInstanceConfig),
         super(identifier: 'channels');
 
   /// Return a partial instance of the entity with ID [id] containing no data.
@@ -535,11 +535,16 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   }
 
   /// Add a channel to another channel's followers.
-  Future<FollowedChannel> followChannel(Snowflake id, Snowflake toFollow) async {
+  Future<FollowedChannel> followChannel(Snowflake id, Snowflake toFollow, {String? auditLogReason}) async {
     final route = HttpRoute()
       ..channels(id: toFollow.toString())
       ..followers();
-    final request = BasicRequest(route, method: 'POST', body: jsonEncode({'webhook_channel_id': id.toString()}));
+    final request = BasicRequest(
+      route,
+      method: 'POST',
+      body: jsonEncode({'webhook_channel_id': id.toString()}),
+      auditLogReason: auditLogReason,
+    );
 
     final response = await client.httpHandler.executeSafe(request);
 
@@ -749,6 +754,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   }
 
   /// List the private archived threads the current user has joined in a channel.
+  // TODO(lexedia): for nyxx v7, this needs to be updated to use `Snowflake` instead of `DateTime`.
   Future<ThreadList> listJoinedPrivateArchivedThreads(Snowflake id, {DateTime? before, int? limit}) async {
     final route = HttpRoute()
       ..channels(id: id.toString())
@@ -759,7 +765,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     final request = BasicRequest(
       route,
       queryParameters: {
-        if (before != null) 'before': before.toIso8601String(),
+        if (before != null) 'before': Snowflake.fromDateTime(before).toString(),
         if (limit != null) 'limit': limit.toString(),
       },
     );

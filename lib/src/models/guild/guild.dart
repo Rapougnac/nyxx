@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:nyxx/src/builders/channel/channel_position.dart';
 import 'package:nyxx/src/builders/channel/guild_channel.dart';
+import 'package:nyxx/src/builders/guild/onboarding.dart';
 import 'package:nyxx/src/builders/guild/template.dart';
 import 'package:nyxx/src/builders/guild/welcome_screen.dart';
 import 'package:nyxx/src/builders/guild/widget.dart';
@@ -17,6 +18,7 @@ import 'package:nyxx/src/http/managers/integration_manager.dart';
 import 'package:nyxx/src/http/managers/member_manager.dart';
 import 'package:nyxx/src/http/managers/role_manager.dart';
 import 'package:nyxx/src/http/managers/scheduled_event_manager.dart';
+import 'package:nyxx/src/http/managers/soundboard_manager.dart';
 import 'package:nyxx/src/http/route.dart';
 import 'package:nyxx/src/models/application.dart';
 import 'package:nyxx/src/models/channel/channel.dart';
@@ -65,8 +67,8 @@ class PartialGuild extends WritableSnowflakeEntity<Guild> {
   /// An [IntegrationManager] for the integrations of this guild.
   IntegrationManager get integrations => IntegrationManager(manager.client.options.integrationConfig, manager.client, guildId: id);
 
-  /// An [EmojiManager] for the emojis of this guild.
-  EmojiManager get emojis => EmojiManager(manager.client.options.emojiCacheConfig, manager.client, guildId: id);
+  /// A [GuildEmojiManager] for the emojis of this guild.
+  GuildEmojiManager get emojis => GuildEmojiManager(manager.client.options.emojiCacheConfig, manager.client, guildId: id);
 
   /// An [GuildStickerManager] for the stickers of this guild.
   GuildStickerManager get stickers => GuildStickerManager(manager.client.options.stickerCacheConfig, manager.client, guildId: id);
@@ -74,8 +76,11 @@ class PartialGuild extends WritableSnowflakeEntity<Guild> {
   /// An [AuditLogManager] for the audit log of this guild.
   AuditLogManager get auditLogs => AuditLogManager(manager.client.options.auditLogEntryConfig, manager.client, guildId: id);
 
+  /// A [GuildSoundboardManager] for the soundboard sounds of this guild.
+  GuildSoundboardManager get soundboard => GuildSoundboardManager(manager.client.options.soundboardCacheConfig, manager.client, guildId: id);
+
   /// A [Cache] for [VoiceState]s in this guild.
-  Cache<VoiceState> get voiceStates => Cache(manager.client, '$id.voiceStates', manager.client.options.voiceStateConfig);
+  Cache<VoiceState> get voiceStates => manager.client.cache.getCache('$id.voiceStates', manager.client.options.voiceStateConfig);
 
   /// A [GuildApplicationCommandManager] for the application commands of this guild.
   GuildApplicationCommandManager get commands => GuildApplicationCommandManager(
@@ -167,6 +172,10 @@ class PartialGuild extends WritableSnowflakeEntity<Guild> {
 
   /// Fetch the onboarding information for this guild.
   Future<Onboarding> fetchOnboarding() => manager.fetchOnboarding(id);
+
+  /// Update this guild's onboarding.
+  Future<Onboarding> updateOnboarding(OnboardingUpdateBuilder builder, {String? auditLogReason}) =>
+      manager.updateOnboarding(id, builder, auditLogReason: auditLogReason);
 
   /// Update the current user's voice state in this guild.
   Future<void> updateCurrentUserVoiceState(CurrentUserVoiceStateUpdateBuilder builder) => manager.updateCurrentUserVoiceState(id, builder);
